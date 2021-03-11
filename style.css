@@ -1,0 +1,12 @@
+.init {
+    position:absolute;
+    width: 1px;
+}
+
+
+#map {
+    position:absolute;
+    transform: scale(32);
+    transform-origin: top left;
+    image-rendering: crisp-edges;
+}

@@ -2,7 +2,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <script src="main.js" type="module"></script>
+  <script src="dist/main.js" type="module"></script>
   <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
@@ -11,16 +11,14 @@
   <h1>Connected Multi-agent path finding visualizer
   </h1>
 
-  <select id="graphs">
-  </select>
-
   <div>
-    <button type="button" id="runButton">Compute execution</button>
-    <div id="slider">
-      <input type="range" min="0" max="0" value="0" id="rangeslider" />
-    </div>
+    <select id="graphs"></select>
+    <button type="button" id="buttonNewAgent">+</button>
+    <button type="button" id="buttonRun" title="Compute an execution">Compute</button>
+    <input type="range" min="0" max="0" value="0" id="rangeslider" />
   </div>
-  <canvas id="canvas" width=800 height=600></canvas>
+  <div id="map">
+  </div>
 </body>
 
 </html>
