@@ -1,12 +1,17 @@
 .init {
-    position:absolute;
-    width: 1px;
+    position: absolute;
+    user-select: none;
+    -webkit-user-drag: none;
+	cursor: grab;
 }
 
 
+img {
+    user-select: none;
+}
+
 #map {
-    position:absolute;
-    transform: scale(32);
+    position: absolute;
     transform-origin: top left;
     image-rendering: crisp-edges;
 }
