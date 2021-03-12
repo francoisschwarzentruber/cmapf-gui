@@ -3,31 +3,38 @@ import { Instance } from './Instance.js';
 
 
 
-export class GUIedition {
+export class GUIInstance {
     private static _instance: Instance;
 
     static set instance(i) {
-        GUIedition._instance = i;
-        GUIedition.update();
+        GUIInstance._instance = i;
+        GUIInstance.update();
     }
 
     static get instance() {
-        return GUIedition._instance;
+        return GUIInstance._instance;
 
     }
 
-    static init() {
-        let instance = new Instance();
-        instance.graph = "smallmaze.png";
+
+    static load(pngFileName: string) {
+        const instance = new Instance();
+        instance.graph = pngFileName;
         instance.init = [{ x: 1, y: 2 }, { x: 2, y: 3 }];
         instance.target = [{ x: 1, y: 2 }, { x: 2, y: 3 }];
-        GUIedition.instance = instance;
+        GUIInstance.instance = instance;
+    }
+
+
+    static init() {
+        document.getElementById("selectPNGFileName").onchange = () => GUIInstance.load((<HTMLInputElement> document.getElementById("selectPNGFileName")).value);
+        GUIInstance.load("smallmaze.png");
     }
 
     static update() {
         const map = document.getElementById("map");
         const img = new Image();
-        img.src = "graphs/" + GUIedition.instance.graph;
+        img.src = "graphs/" + GUIInstance.instance.graph;
         img.onload = () => {
             const w = img.width;
             const h = img.height;
@@ -35,20 +42,20 @@ export class GUIedition {
             img.style.height = h * GUIMap.zoom + "px";
         }
         map.appendChild(img);
-        for (let i = 0; i < GUIedition.instance.init.length; i++)
-            map.appendChild(GUIedition.initPointToHTMLElement(i));
-        for (let i = 0; i < GUIedition.instance.target.length; i++)
-            map.appendChild(GUIedition.targetPointToHTMLElement(i));
+        for (let i = 0; i < GUIInstance.instance.init.length; i++)
+            map.appendChild(GUIInstance.initPointToHTMLElement(i));
+        for (let i = 0; i < GUIInstance.instance.target.length; i++)
+            map.appendChild(GUIInstance.targetPointToHTMLElement(i));
     }
 
     static initPointToHTMLElement(i: number) {
         const img = new Image();
         img.classList.add("init");
         img.src = "img/init.png";
-        GUIMap.setPosition(img, GUIedition.instance.init[i]);
+        GUIMap.setPosition(img, GUIInstance.instance.init[i]);
         GUIMap.forAgentNumber(img, i);
         GUIMap.draggable(img, () => {
-            GUIedition.instance.init[i] = {
+            GUIInstance.instance.init[i] = {
                 x: img.offsetLeft / GUIMap.zoom,
                 y: img.offsetTop / GUIMap.zoom
             };
@@ -61,10 +68,10 @@ export class GUIedition {
         const img = new Image();
         img.classList.add("init");
         img.src = "img/target.png";
-        GUIMap.setPosition(img, GUIedition.instance.init[i]);
+        GUIMap.setPosition(img, GUIInstance.instance.init[i]);
         GUIMap.forAgentNumber(img, i);
         GUIMap.draggable(img, () => {
-            GUIedition.instance.target[i] = {
+            GUIInstance.instance.target[i] = {
                 x: img.offsetLeft / GUIMap.zoom,
                 y: img.offsetTop / GUIMap.zoom
             };

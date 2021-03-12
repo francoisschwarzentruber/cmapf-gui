@@ -1,18 +1,21 @@
-const CELLSIZE = 16;
-
 export class GUIMap {
     static setPosition(element: HTMLElement, point: Point) {
         element.style.left = point.x * GUIMap.zoom + "px";
         element.style.top = point.y * GUIMap.zoom + "px";
     }
 
-
-    static get zoom() {
+    static get zoom(): number {
         return 32;
+    }
+
+
+    static get width(): number {
+        return (<HTMLImageElement>document.getElementById("map")).width;
     }
     static forAgentNumber(element: HTMLElement, i: number) {
         element.style.filter = `hue-rotate(${i * 50}deg)`;
     }
+
 
     static draggable(element: HTMLElement, callback) {
         let dx = 0, dy = 0, x = 0, y = 0;
@@ -29,8 +32,6 @@ export class GUIMap {
             map.onmousemove = elementDrag;
             map.onmouseup = closeDragElement;
         }
-
-
 
         function elementDrag(e) {
             if (!drag) return;
@@ -66,7 +67,6 @@ export class GUIMap {
             map.onmousemove = null;
 
             callback();
-            
         }
     }
 }

@@ -7,17 +7,18 @@
 </head>
 
 <body>
-
   <h1>Connected Multi-agent path finding visualizer
   </h1>
 
   <div>
-    <select id="graphs"></select>
+    <select id="selectPNGFileName"></select>
     <button type="button" id="buttonNewAgent">+</button>
-    <button type="button" id="buttonRun" title="Compute an execution">Compute</button>
-    <input type="range" min="0" max="0" value="0" id="rangeslider" />
+    <button type="button" id="buttonCompute" title="Compute an execution">Compute</button>
+    <input type="range" min="0" max="0" value="0" id="slider" />
   </div>
   <div id="map">
+    <div id="config">
+    </div>
   </div>
 </body>
 

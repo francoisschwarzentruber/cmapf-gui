@@ -6,6 +6,24 @@
 }
 
 
+.target {
+    position: absolute;
+    user-select: none;
+    -webkit-user-drag: none;
+	cursor: grab;
+}
+
+
+.drone {
+    position: absolute;
+}
+
+
+
+#config {
+    position: absolute;
+}
+
 img {
     user-select: none;
 }
