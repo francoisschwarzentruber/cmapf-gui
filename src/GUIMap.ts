@@ -23,6 +23,7 @@ export class GUIMap {
 
     static draggable(element: HTMLElement, callback) {
         let dx = 0, dy = 0, x = 0, y = 0;
+        element.ondragstart = function () { return false };
         // element.draggable = false;//it is to disable the normal "draggable"
         let map = document.getElementById("map");
         element.addEventListener("mousedown", dragMouseDown);

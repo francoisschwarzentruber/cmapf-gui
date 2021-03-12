@@ -19,6 +19,10 @@
 }
 
 
+#inputRadius {
+    width: 80px;
+}
+
 
 #config {
     position: absolute;
