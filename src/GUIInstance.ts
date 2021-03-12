@@ -21,7 +21,7 @@ export class GUIInstance {
     
     static load(pngFileName: string) {
         const instance = new Instance();
-        instance.graph = pngFileName;
+        instance.pngFileName = pngFileName;
         instance.init = [{ x: 1, y: 2 }, { x: 2, y: 3 }];
         instance.target = [{ x: 1, y: 2 }, { x: 2, y: 3 }];
         instance.radius = parseInt(GUIInstance.inputRadius.value);
@@ -38,7 +38,7 @@ export class GUIInstance {
     static update() {
         const map = document.getElementById("map");
         const img = <HTMLImageElement> document.getElementById("background");
-        img.src = "graphs/" + GUIInstance.instance.graph;
+        img.src = "graphs/" + GUIInstance.instance.pngFileName;
         img.onload = () => {
             const w = img.width;
             const h = img.height;

@@ -11,4 +11,10 @@ Graphical tool to visualize CMAPF executions.
 
     runlocally.sh
     
-    
+## For interfacing with the solver
+
+Everything is explained in 
+
+     compute.php
+     
+     
