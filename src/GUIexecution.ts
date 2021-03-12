@@ -1,10 +1,10 @@
-import { GUIMap } from './GUIMap';
+import { GUIMap } from './GUIMap.js';
 export class GUIExecution {
     static execution: number[][];
 
     static init() {
         document.getElementById("buttonCompute").onclick = GUIExecution.compute;
-        GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
+        
     }
 
     static get slider() { return (document.getElementById("slider") as HTMLInputElement); }
@@ -24,8 +24,8 @@ export class GUIExecution {
 
     static agentPointToHTMLElement(i: number, vertex: {x: number, y: number}) {
         const img = new Image();
-        img.classList.add("drone");
-        img.src = "img/drone.png";
+        img.classList.add("agent");
+        img.src = "img/agent.png";
         GUIMap.setPosition(img, vertex);
         GUIMap.forAgentNumber(img, i);
         return img;
@@ -33,6 +33,7 @@ export class GUIExecution {
 
 
     static showConfig(t: number) {
+        console.log(`show config ${t}`);
         const c = GUIExecution.config(t);
         document.getElementById("config").innerHTML = "";
         
@@ -45,6 +46,7 @@ export class GUIExecution {
     static load(exec) {
         GUIExecution.execution = exec;
         GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
+        GUIExecution.slider.oninput = () => {GUIExecution.showConfig(GUIExecution.sliderValue)};
         GUIExecution.slider.onchange = () => {GUIExecution.showConfig(GUIExecution.sliderValue)};
         
     }
