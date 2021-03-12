@@ -1,14 +1,15 @@
+import { GUIInstance } from './GUIInstance';
 import { GUIMap } from './GUIMap.js';
 export class GUIExecution {
     static execution: number[][];
 
     static init() {
         document.getElementById("buttonCompute").onclick = GUIExecution.compute;
-        
+
     }
 
     static get slider() { return (document.getElementById("slider") as HTMLInputElement); }
-    static get sliderValue() {return parseInt(GUIExecution.slider.value);}
+    static get sliderValue() { return parseInt(GUIExecution.slider.value); }
 
 
     static executionLength(): number { return Math.max(...GUIExecution.execution.map((path) => path.length)); }
@@ -22,7 +23,7 @@ export class GUIExecution {
     }
 
 
-    static agentPointToHTMLElement(i: number, vertex: {x: number, y: number}) {
+    static agentPointToHTMLElement(i: number, vertex: { x: number, y: number }) {
         const img = new Image();
         img.classList.add("agent");
         img.src = "img/agent.png";
@@ -36,7 +37,7 @@ export class GUIExecution {
         console.log(`show config ${t}`);
         const c = GUIExecution.config(t);
         document.getElementById("config").innerHTML = "";
-        
+
         for (let agent = 0; agent < c.length; agent++) {
             document.getElementById("config").appendChild(GUIExecution.agentPointToHTMLElement(agent, c[agent]));
         }
@@ -46,13 +47,16 @@ export class GUIExecution {
     static load(exec) {
         GUIExecution.execution = exec;
         GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
-        GUIExecution.slider.oninput = () => {GUIExecution.showConfig(GUIExecution.sliderValue)};
-        GUIExecution.slider.onchange = () => {GUIExecution.showConfig(GUIExecution.sliderValue)};
-        
+        GUIExecution.slider.oninput = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
+        GUIExecution.slider.onchange = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
+
     }
 
     static compute() {
-        fetch("compute.php").then((response) => {
+        fetch("compute.php", {
+            method: 'post',
+            body: GUIInstance.instance.toString()
+        }).then((response) => {
             if (response.ok) {
                 response.text().then((str) => GUIExecution.load(eval(str)));
             }
