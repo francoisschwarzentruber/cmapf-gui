@@ -16,12 +16,15 @@ export class GUIInstance {
 
     }
 
+    static get inputRadius() { return <HTMLInputElement> document.getElementById("inputRadius");};
 
+    
     static load(pngFileName: string) {
         const instance = new Instance();
         instance.graph = pngFileName;
         instance.init = [{ x: 1, y: 2 }, { x: 2, y: 3 }];
         instance.target = [{ x: 1, y: 2 }, { x: 2, y: 3 }];
+        instance.radius = parseInt(GUIInstance.inputRadius.value);
         GUIInstance.instance = instance;
     }
 
@@ -29,11 +32,12 @@ export class GUIInstance {
     static init() {
         document.getElementById("selectPNGFileName").onchange = () => GUIInstance.load((<HTMLInputElement> document.getElementById("selectPNGFileName")).value);
         GUIInstance.load("smallmaze.png");
+        GUIInstance.inputRadius.oninput = () => {GUIInstance.instance.radius = parseInt(GUIInstance.inputRadius.value);};
     }
 
     static update() {
         const map = document.getElementById("map");
-        const img = new Image();
+        const img = <HTMLImageElement> document.getElementById("background");
         img.src = "graphs/" + GUIInstance.instance.graph;
         img.onload = () => {
             const w = img.width;

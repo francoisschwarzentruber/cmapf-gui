@@ -1,5 +1,6 @@
-import { GUIInstance } from './GUIInstance';
+import { GUIInstance } from './GUIInstance.js';
 import { GUIMap } from './GUIMap.js';
+
 export class GUIExecution {
     static execution: number[][];
 
@@ -16,9 +17,9 @@ export class GUIExecution {
 
     static config(t: number) {
         let c = [];
-        for (let agent = 0; agent < GUIExecution.execution.length; agent++) {
+        for (let agent = 0; agent < GUIExecution.execution.length; agent++)
             c.push(GUIExecution.execution[agent][Math.min(GUIExecution.execution[agent].length - 1, t)]);
-        }
+        
         return c.map((i) => ({ x: i % GUIMap.width, y: i / GUIMap.width }));
     }
 
@@ -34,7 +35,6 @@ export class GUIExecution {
 
 
     static showConfig(t: number) {
-        console.log(`show config ${t}`);
         const c = GUIExecution.config(t);
         document.getElementById("config").innerHTML = "";
 

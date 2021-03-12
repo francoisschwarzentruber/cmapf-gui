@@ -8,10 +8,14 @@ export class GUIMap {
         return 32;
     }
 
-
     static get width(): number {
-        return (<HTMLImageElement>document.getElementById("map")).width;
+        return (<HTMLImageElement>document.getElementById("background")).width;
     }
+
+    static pointToNumber({x, y}: {x: number, y: number}) {
+        return y * GUIMap.width + x;
+    }
+
     static forAgentNumber(element: HTMLElement, i: number) {
         element.style.filter = `hue-rotate(${i * 50}deg)`;
     }
