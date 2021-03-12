@@ -5,6 +5,7 @@ Graphical tool to visualize CMAPF executions.
 ## Installation
 
      git clone ....
+     sudo dnf install php
      tsc
     
 ## To run the tool
