@@ -40,7 +40,6 @@ export class GUIMap {
 
         function elementDrag(e) {
             if (!drag) return;
-            console.log("drag")
 
             e.target.classList.add("magnetDrag");
             e = e || window.event;
@@ -50,9 +49,6 @@ export class GUIMap {
             dy = y - e.clientY;
             x = e.clientX;
             y = e.clientY;
-
-            console.log(x);
-            console.log(dx);
 
             element.style.left = (element.offsetLeft - dx) + "px";
             element.style.top = (element.offsetTop - dy) + "px";

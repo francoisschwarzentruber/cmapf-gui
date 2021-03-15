@@ -16,9 +16,9 @@ export class GUIInstance {
 
     }
 
-    static get inputRadius() { return <HTMLInputElement> document.getElementById("inputRadius");};
+    static get inputRadius() { return <HTMLInputElement>document.getElementById("inputRadius"); };
 
-    
+
     static load(pngFileName: string) {
         const instance = new Instance();
         instance.pngFileName = pngFileName;
@@ -30,14 +30,13 @@ export class GUIInstance {
 
 
     static init() {
-        document.getElementById("selectPNGFileName").onchange = () => GUIInstance.load((<HTMLInputElement> document.getElementById("selectPNGFileName")).value);
+        document.getElementById("selectPNGFileName").onchange = () => GUIInstance.load((<HTMLInputElement>document.getElementById("selectPNGFileName")).value);
         GUIInstance.load("smallmaze.png");
-        GUIInstance.inputRadius.oninput = () => {GUIInstance.instance.radius = parseInt(GUIInstance.inputRadius.value);};
+        GUIInstance.inputRadius.oninput = () => { GUIInstance.instance.radius = parseInt(GUIInstance.inputRadius.value); };
     }
 
     static update() {
-        const map = document.getElementById("map");
-        const img = <HTMLImageElement> document.getElementById("background");
+        const img = <HTMLImageElement>document.getElementById("background");
         img.src = "graphs/" + GUIInstance.instance.pngFileName;
         img.onload = () => {
             const w = img.width;
@@ -45,11 +44,11 @@ export class GUIInstance {
             img.style.width = w * GUIMap.zoom + "px";
             img.style.height = h * GUIMap.zoom + "px";
         }
-        map.appendChild(img);
+        const initAndTargets = document.getElementById("initAndTargets");
         for (let i = 0; i < GUIInstance.instance.init.length; i++)
-            map.appendChild(GUIInstance.initPointToHTMLElement(i));
+            initAndTargets.appendChild(GUIInstance.initPointToHTMLElement(i));
         for (let i = 0; i < GUIInstance.instance.target.length; i++)
-            map.appendChild(GUIInstance.targetPointToHTMLElement(i));
+            initAndTargets.appendChild(GUIInstance.targetPointToHTMLElement(i));
     }
 
     static initPointToHTMLElement(i: number) {
