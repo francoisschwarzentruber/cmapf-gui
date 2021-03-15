@@ -36,11 +36,11 @@ export class GUIInstance {
     }
 
     static update() {
-        const img = <HTMLImageElement>document.getElementById("background");
+        const img = <HTMLImageElement> document.getElementById("background");
         img.src = "graphs/" + GUIInstance.instance.pngFileName;
         img.onload = () => {
-            const w = img.width;
-            const h = img.height;
+            const w = img.naturalWidth;
+            const h = img.naturalHeight;
             img.style.width = w * GUIMap.zoom + "px";
             img.style.height = h * GUIMap.zoom + "px";
         }
