@@ -45,6 +45,7 @@ export class GUIInstance {
             img.style.height = h * GUIMap.zoom + "px";
         }
         const initAndTargets = document.getElementById("initAndTargets");
+        initAndTargets.innerHTML = "";
         for (let i = 0; i < GUIInstance.instance.init.length; i++)
             initAndTargets.appendChild(GUIInstance.initPointToHTMLElement(i));
         for (let i = 0; i < GUIInstance.instance.target.length; i++)
