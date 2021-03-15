@@ -30,6 +30,7 @@
 
 img {
     user-select: none;
+    image-rendering: pixelated;
 }
 
 #map {
