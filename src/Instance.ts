@@ -11,8 +11,8 @@ export class Instance {
     toString() {
         return JSON.stringify({
             pngFileName: this.pngFileName,
-            init: this.init,
-            target: this.target,
+            init: this.init.map(GUIMap.pointToNumber),
+            target: this.target.map(GUIMap.pointToNumber),
             radius: this.radius
         });
     }
@@ -20,8 +20,8 @@ export class Instance {
     toObject() {
         return {
             pngFileName: this.pngFileName,
-            init: this.init,
-            target: this.target,
+            init: this.init.map(GUIMap.pointToNumber),
+            target: this.target.map(GUIMap.pointToNumber),
             radius: this.radius
         };
     }
