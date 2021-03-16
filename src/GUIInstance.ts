@@ -36,14 +36,18 @@ export class GUIInstance {
     }
 
     static update() {
-        const img = <HTMLImageElement> document.getElementById("background");
+        const img = new Image();
         img.src = "graphs/" + GUIInstance.instance.pngFileName;
+        const w = img.naturalWidth;
+        const h = img.naturalHeight;
         img.onload = () => {
-            const w = img.naturalWidth;
-            const h = img.naturalHeight;
-            img.style.width = w * GUIMap.zoom + "px";
-            img.style.height = h * GUIMap.zoom + "px";
+            const canvas = <HTMLCanvasElement> document.getElementById("background");
+            canvas.width = w * GUIMap.zoom;
+            canvas.height = h * GUIMap.zoom;
+            canvas.getContext('2d').imageSmoothingEnabled = false;
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
         }
+
         const initAndTargets = document.getElementById("initAndTargets");
         initAndTargets.innerHTML = "";
         for (let i = 0; i < GUIInstance.instance.init.length; i++)
