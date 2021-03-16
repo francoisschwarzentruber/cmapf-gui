@@ -12,8 +12,16 @@ export class GUIMap {
         return (<HTMLImageElement>document.getElementById("background")).width;
     }
 
-    static pointToNumber({x, y}: {x: number, y: number}) {
-        return y * GUIMap.width + x;
+    static pointToNumber(p: Point) {
+        const canvas = <HTMLCanvasElement> document.getElementById("background");
+        var index = 0;
+        for (var x = 0; x < canvas.width / GUIMap.zoom; x++)
+            for (var y = 0; y < canvas.height / GUIMap.zoom; y++){
+                if (p.x == x && p.y == y)
+                    return index;
+                if (canvas.getContext('2d').getImageData(x, y, 1, 1).data[0] < 200) // white ??
+                    index++;
+            }
     }
 
     static forAgentNumber(element: HTMLElement, i: number) {
@@ -57,7 +65,6 @@ export class GUIMap {
         function closeDragElement() {
             if (!drag)
                 return;
-            console.log("close drag")
 
             element.style.left = Math.round(element.offsetLeft / GUIMap.zoom) * GUIMap.zoom + "px";
             element.style.top = Math.round(element.offsetTop / GUIMap.zoom) * GUIMap.zoom + "px";
