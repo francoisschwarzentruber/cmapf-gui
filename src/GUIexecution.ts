@@ -19,7 +19,6 @@ export class GUIExecution {
         let c = [];
         for (let agent = 0; agent < GUIExecution.execution.length; agent++)
             c.push(GUIExecution.execution[agent][Math.min(GUIExecution.execution[agent].length - 1, t)]);
-        
         return c.map((i) => ({ x: i % GUIMap.width, y: i / GUIMap.width }));
     }
 
@@ -53,9 +52,14 @@ export class GUIExecution {
     }
 
     static compute() {
+        var fd = new FormData();
+        var data = GUIInstance.instance.toObject();
+        for(var i in data){
+            fd.append(i, JSON.stringify(data[i]));
+        }
         fetch("compute.php", {
             method: 'post',
-            body: GUIInstance.instance.toString()
+            body: fd
         }).then((response) => {
             if (response.ok) {
                 response.text().then((str) => GUIExecution.load(eval(str)));
