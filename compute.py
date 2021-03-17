@@ -30,7 +30,7 @@ if __name__ == "__main__":
             filehandle.write(' ' + str(t))
         filehandle.write(' \n')
     filehandle.close()
-    proc = subprocess.Popen(["./ccbs.out --graph-folder graphs/ --exp exps/1.exp"], stdout=subprocess.PIPE, shell=True)
+    proc = subprocess.Popen(["./ccbs.out --graph-folder graphs/ --exp exps/1.exp --collisionfree true"], stdout=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
 
     # Parse output for solution
