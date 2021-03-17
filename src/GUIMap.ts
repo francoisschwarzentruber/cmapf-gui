@@ -1,3 +1,4 @@
+import { GUIExecution } from './GUIexecution.js';
 export class GUIMap {
 
 
@@ -136,6 +137,7 @@ export class GUIMap {
         let drag = true;
 
         function dragMouseDown(evt) {
+            GUIExecution.reset();
             drag = true;
             x = evt.clientX;
             y = evt.clientY;
