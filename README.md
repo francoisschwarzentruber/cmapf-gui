@@ -5,6 +5,8 @@ Graphical tool to visualize CMAPF executions.
 ## Installation
 
      git clone ....
+     sudo pip install python-igraph
+     sudo pip3 install python-gflags
      sudo dnf install php
      tsc
     
