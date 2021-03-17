@@ -4,37 +4,48 @@ import { Instance } from './Instance.js';
 
 
 export class GUIInstance {
-    private static _instance: Instance;
+    private static _instance: Instance; // the instance (png file, init, target, radius)
 
-    static set instance(i) {
-        GUIInstance._instance = i;
+    static set instance(instance: Instance) {
+        GUIInstance._instance = instance;
         GUIInstance.update();
     }
 
-    static get instance() {
+    static get instance(): Instance {
         return GUIInstance._instance;
 
     }
 
-    static get inputRadius() { return <HTMLInputElement>document.getElementById("inputRadius"); };
+    static get inputRadius(): HTMLInputElement { return <HTMLInputElement>document.getElementById("inputRadius"); };
 
-
-    static load(pngFileName: string) {
+    /**
+     * 
+     * @param pngFileName 
+     * @description load the png file and produce a new instance based on it
+     */
+    static load(pngFileName: string): void {
         const instance = new Instance();
         instance.pngFileName = pngFileName;
         instance.init = [{ x: 1, y: 2 }, { x: 2, y: 3 }];
-        instance.target = [{ x: 1, y: 2 }, { x: 2, y: 3 }];
+        instance.target = [{ x: 5, y: 6 }, { x: 6, y: 3 }];
         instance.radius = parseInt(GUIInstance.inputRadius.value);
         GUIInstance.instance = instance;
     }
 
-
+    /**
+     * initialization
+     */
     static init() {
+        const initialPNGFileName = "smallmaze.png";
         document.getElementById("selectPNGFileName").onchange = () => GUIInstance.load((<HTMLInputElement>document.getElementById("selectPNGFileName")).value);
-        GUIInstance.load("smallmaze.png");
+        (<HTMLInputElement>document.getElementById("selectPNGFileName")).value = initialPNGFileName;
+        GUIInstance.load(initialPNGFileName);
         GUIInstance.inputRadius.oninput = () => { GUIInstance.instance.radius = parseInt(GUIInstance.inputRadius.value); };
     }
 
+    /**
+     * update the GUI wrt the instance
+     */
     static update() {
         GUIMap.load(GUIInstance.instance.pngFileName);
         const initAndTargets = document.getElementById("initAndTargets");
