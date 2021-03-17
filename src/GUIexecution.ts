@@ -54,7 +54,7 @@ export class GUIExecution {
     static compute() {
         var fd = new FormData();
         var data = GUIInstance.instance.toObject();
-        for(var i in data){
+        for (var i in data) {
             fd.append(i, JSON.stringify(data[i]));
         }
         fetch("compute.php", {
@@ -62,8 +62,10 @@ export class GUIExecution {
             body: fd
         }).then((response) => {
             if (response.ok) {
-                response.text().then((str) => console.log(str));
-                response.text().then((str) => GUIExecution.load(eval(str)));
+                response.text().then((str) => {
+                    console.log(str);
+                    GUIExecution.load(eval(str));
+                });
             }
         });
     }

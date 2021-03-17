@@ -1,41 +1,53 @@
 export class GUIMap {
-    static map: boolean[][];
 
 
+    static map: boolean[][]; //bitmap of the map (used like map[x][y]). True means obstacle.
+    static imgObstacle = new Image(); //image of the obstacle
 
 
+    static init() {
+        GUIMap.imgObstacle.src = "img/obstacle.png";
+    }
+
+    /**
+     * 
+     * @param img 
+     * @returns the bitmap of the image
+     */
     private static _imgToBitMap(img: HTMLImageElement): boolean[][] {
         const w = img.naturalWidth;
         const h = img.naturalHeight;
         const map: boolean[][] = [];
         const canvas = document.createElement("canvas");
-        canvas.width = w;
-        canvas.height = h;
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0);
         let data = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
-        for (let x = 0; x < w; x++)
-            map[x] = [];
-
+        for (let x = 0; x < w; x++) map[x] = [];
         for (let y = 0; y < h; y++)
             for (let x = 0; x < w; x++)
-                map[x][y] = data[(y * w + x) * 4] == 0;
+                map[x][y] = data[(y * w + x) * 4] == 0; //0 = black = obstacle
         return map;
     }
 
-    /**
     static load(pngFileName: string) {
-        const img = <HTMLImageElement>document.getElementById("background");
+        console.log("loading png")
+        const img = new Image();
         img.src = "graphs/" + pngFileName;
         img.onload = () => {
-            GUIMap.map= GUIMap._imgToBitMap(img);
-
-
-            const canvas
-            img.style.width = w * GUIMap.zoom + "px";
-            img.style.height = h * GUIMap.zoom + "px";
+            GUIMap.map = GUIMap._imgToBitMap(img);
+            GUIMap.drawMap();
         }
-    } */
+    }
 
-
+    static drawMap() {
+        const canvas = <HTMLCanvasElement>document.getElementById("background");
+        canvas.width = this.width * GUIMap.zoom;
+        canvas.height = this.height * GUIMap.zoom;
+        for (let x = 0; x < GUIMap.width; x++)
+            for (let y = 0; y < GUIMap.height; y++)
+                if (GUIMap.map[x][y])
+                    canvas.getContext('2d').drawImage(GUIMap.imgObstacle, x * GUIMap.zoom, y * GUIMap.zoom, 32, 32);
+    }
 
     static setPosition(element: HTMLElement, point: Point) {
         element.style.left = point.x * GUIMap.zoom + "px";
@@ -47,17 +59,33 @@ export class GUIMap {
     }
 
     static get width(): number {
-        return (<HTMLImageElement>document.getElementById("background")).width;
+        return this.map.length;
+    }
+
+    static get height(): number {
+        return this.map[0].length;
     }
 
     static pointToNumber(p: Point) {
-        const canvas = <HTMLCanvasElement> document.getElementById("background");
-        var index = 0;
-        for (var x = 0; x < canvas.width / GUIMap.zoom; x++)
-            for (var y = 0; y < canvas.height / GUIMap.zoom; y++){
+        let index = 0;
+        for (let x = 0; x < GUIMap.width; x++)
+            for (let y = 0; y < GUIMap.height; y++) {
                 if (p.x == x && p.y == y)
                     return index;
-                if (canvas.getContext('2d').getImageData(x, y, 1, 1).data[0] < 200) // white ??
+                if (!GUIMap.map[x][y])
+                    index++;
+            }
+        throw "outside";
+    }
+
+
+    static numberToPoint(i: number) {
+        let index = 0;
+        for (let x = 0; x < GUIMap.width; x++)
+            for (let y = 0; y < GUIMap.height; y++) {
+                if (!GUIMap.map[x][y] && index == i) return { x: x, y: y };
+
+                if (!GUIMap.map[x][y])
                     index++;
             }
     }
