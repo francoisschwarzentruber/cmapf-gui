@@ -26,7 +26,7 @@ export class GUIInstance {
     static load(pngFileName: string): void {
         const instance = new Instance();
         instance.pngFileName = pngFileName;
-        instance.init = [{ x: 1, y: 2 }, { x: 2, y: 3 }];
+        instance.init = [{ x: 1, y: 2 }, { x: 2, y: 4 }];
         instance.target = [{ x: 5, y: 6 }, { x: 6, y: 3 }];
         instance.radius = parseInt(GUIInstance.inputRadius.value);
         GUIInstance.instance = instance;

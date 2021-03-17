@@ -19,7 +19,7 @@ export class GUIExecution {
         let c = [];
         for (let agent = 0; agent < GUIExecution.execution.length; agent++)
             c.push(GUIExecution.execution[agent][Math.min(GUIExecution.execution[agent].length - 1, t)]);
-        return c.map((i) => ({ x: i % GUIMap.width, y: i / GUIMap.width }));
+        return c.map(GUIMap.numberToPoint);
     }
 
 
