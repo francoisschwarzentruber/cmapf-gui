@@ -76,7 +76,7 @@ export class GUIInstance {
         const img = new Image();
         img.classList.add("init");
         img.src = "img/target.png";
-        GUIMap.setPosition(img, GUIInstance.instance.init[i]);
+        GUIMap.setPosition(img, GUIInstance.instance.target[i]);
         GUIMap.forAgentNumber(img, i);
         GUIMap.draggable(img, () => {
             GUIInstance.instance.target[i] = {
