@@ -26,6 +26,7 @@ export class GUIMap {
         for (let y = 0; y < h; y++)
             for (let x = 0; x < w; x++)
                 map[x][y] = data[(y * w + x) * 4] == 0; //0 = black = obstacle
+        console.log(map);
         return map;
     }
 
@@ -68,11 +69,14 @@ export class GUIMap {
 
     static pointToNumber(p: Point) {
         let index = 0;
-        for (let x = 0; x < GUIMap.width; x++)
-            for (let y = 0; y < GUIMap.height; y++) {
-                if (p.x == x && p.y == y)
+        for (let x = 0; x < GUIMap.height; x++)
+            for (let y = 0; y < GUIMap.width; y++) {
+                if (p.x == y && p.y == x){
+                    if (GUIMap.map[y][x])
+                        return -1;
                     return index;
-                if (!GUIMap.map[x][y])
+                }
+                if (!GUIMap.map[y][x])
                     index++;
             }
         throw "outside";
@@ -81,6 +85,16 @@ export class GUIMap {
 
     static numberToPoint(i: number) {
         let index = 0;
+        for (let x = 0; x < GUIMap.height; x++)
+            for (let y = 0; y < GUIMap.width; y++) {
+                if (!GUIMap.map[y][x] && index == i)
+                    return {x:y, y:x};
+                if (!GUIMap.map[y][x])
+                    index++;
+            }
+
+
+
         for (let x = 0; x < GUIMap.width; x++)
             for (let y = 0; y < GUIMap.height; y++) {
                 if (!GUIMap.map[x][y] && index == i) return { x: x, y: y };

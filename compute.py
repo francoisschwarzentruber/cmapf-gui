@@ -9,8 +9,8 @@ if __name__ == "__main__":
         print('Error! Wrong argument count!')
         exit(1)
 
-    init = json.loads(sys.argv[1])
-    target = json.loads(sys.argv[2])
+    init = json.loads('[' + sys.argv[1] + ']')
+    target = json.loads('[' + sys.argv[2] + ']')
     radius = sys.argv[3]
     png = sys.argv[4]
     # Create grpah (physical and comm)
