@@ -126,6 +126,7 @@ export class GUIMap {
 
 
     static draggable(element: HTMLElement, callback) {
+        let initPoint: Point;
         let dx = 0, dy = 0, x = 0, y = 0;
         element.ondragstart = function () { return false };
         // element.draggable = false;//it is to disable the normal "draggable"
@@ -140,6 +141,8 @@ export class GUIMap {
             y = evt.clientY;
             map.onmousemove = elementDrag;
             map.onmouseup = closeDragElement;
+            initPoint = { x: Math.floor(element.offsetLeft / GUIMap.zoom), y: Math.floor(element.offsetTop / GUIMap.zoom) };
+            console.log(initPoint)
         }
 
         function elementDrag(e) {
@@ -162,8 +165,21 @@ export class GUIMap {
             if (!drag)
                 return;
 
-            element.style.left = Math.round(element.offsetLeft / GUIMap.zoom) * GUIMap.zoom + "px";
-            element.style.top = Math.round(element.offsetTop / GUIMap.zoom) * GUIMap.zoom + "px";
+            const newPoint = {
+                x: Math.round(element.offsetLeft / GUIMap.zoom),
+                y: Math.round(element.offsetTop / GUIMap.zoom)
+            };
+            console.log(newPoint)
+
+            if (!GUIMap.map[newPoint.x][newPoint.y]) {
+                element.style.left = newPoint.x * GUIMap.zoom + "px";
+                element.style.top = newPoint.y * GUIMap.zoom + "px";
+            }
+            else {
+                element.style.left = initPoint.x * GUIMap.zoom + "px";
+                element.style.top = initPoint.y * GUIMap.zoom + "px";
+            }
+
             drag = false;
 
             // stop moving when mouse button is released:
