@@ -41,12 +41,13 @@ export class GUIExecution {
 
 
     static load(exec: Point[][]) {
-        if (exec.length == 0)
+        if (exec.length == 0) 
             throw "No solution";
         GUIExecution.execution = exec;
         GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
         GUIExecution.slider.oninput = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
         GUIExecution.slider.onchange = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
+        GUIExecution.slider.classList.remove("disabled");
     }
 
 
@@ -54,6 +55,7 @@ export class GUIExecution {
         GUIExecution.execution = [];
         GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
         document.getElementById("config").innerHTML = "";
+        GUIExecution.slider.classList.add("disabled");
     }
 
     static compute() {
