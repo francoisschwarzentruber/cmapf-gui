@@ -157,8 +157,10 @@ export class GUIMap {
             x = e.clientX;
             y = e.clientY;
 
-            element.style.left = (element.offsetLeft - dx) + "px";
-            element.style.top = (element.offsetTop - dy) + "px";
+            const elX = Math.min(Math.max(0, (element.offsetLeft - dx)), GUIMap.width * GUIMap.zoom - GUIMap.zoom);
+            const elY = Math.min(Math.max(0, (element.offsetTop - dy)), GUIMap.height * GUIMap.zoom - GUIMap.zoom);
+            element.style.left = elX + "px";
+            element.style.top = elY + "px";
         }
 
         function closeDragElement() {
