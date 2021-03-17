@@ -12,7 +12,6 @@ export class GUIPngFileNames {
 
 
 function loadListExamples(pngFileNames: string[]) {
-    console.log(pngFileNames)
     let select = <any>document.getElementById("selectPNGFileName");
     select.addEventListener("change", () => { GUIInstance.load(select.value) });
   

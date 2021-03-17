@@ -62,6 +62,7 @@ export class GUIExecution {
             body: fd
         }).then((response) => {
             if (response.ok) {
+                response.text().then((str) => console.log(str));
                 response.text().then((str) => GUIExecution.load(eval(str)));
             }
         });
