@@ -9,6 +9,19 @@ export class GUIMap {
         GUIMap.imgObstacle.src = "img/obstacle.png";
     }
 
+
+    static getRandomPoint(): Point {
+        let i = 100;
+        while (i > 0) {
+            const x = Math.floor(Math.random() * GUIMap.width);
+            const y = Math.floor(Math.random() * GUIMap.height);
+            if (!GUIMap.map[x][y])
+                return { x: x, y: y };
+            i--;
+        }
+
+        return { x: 2, y: 2 };
+    }
     /**
      * 
      * @param img 
@@ -30,14 +43,17 @@ export class GUIMap {
         return map;
     }
 
-    static load(pngFileName: string) {
-        console.log("loading png")
-        const img = new Image();
-        img.src = "graphs/" + pngFileName;
-        img.onload = () => {
-            GUIMap.map = GUIMap._imgToBitMap(img);
-            GUIMap.drawMap();
-        }
+    static load(pngFileName: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            console.log("loading png")
+            const img = new Image();
+            img.src = "graphs/" + pngFileName;
+            img.onload = () => {
+                GUIMap.map = GUIMap._imgToBitMap(img);
+                GUIMap.drawMap();
+                resolve();
+            }
+        });
     }
 
     static drawMap() {
@@ -71,7 +87,7 @@ export class GUIMap {
         let index = 0;
         for (let x = 0; x < GUIMap.height; x++)
             for (let y = 0; y < GUIMap.width; y++) {
-                if (p.x == y && p.y == x){
+                if (p.x == y && p.y == x) {
                     if (GUIMap.map[y][x])
                         return -1;
                     return index;
@@ -88,7 +104,7 @@ export class GUIMap {
         for (let x = 0; x < GUIMap.height; x++)
             for (let y = 0; y < GUIMap.width; y++) {
                 if (!GUIMap.map[y][x] && index == i)
-                    return {x:y, y:x};
+                    return { x: y, y: x };
                 if (!GUIMap.map[y][x])
                     index++;
             }

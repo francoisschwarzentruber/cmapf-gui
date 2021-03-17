@@ -2,12 +2,9 @@ import { GUIInstance } from './GUIInstance.js';
 import { GUIMap } from './GUIMap.js';
 
 export class GUIExecution {
-    static execution: number[][];
+    static execution: Point[][];
 
-    static init() {
-        document.getElementById("buttonCompute").onclick = GUIExecution.compute;
-
-    }
+    static init() { document.getElementById("buttonCompute").onclick = GUIExecution.compute; }
 
     static get slider() { return (document.getElementById("slider") as HTMLInputElement); }
     static get sliderValue() { return parseInt(GUIExecution.slider.value); }
@@ -19,7 +16,7 @@ export class GUIExecution {
         let c = [];
         for (let agent = 0; agent < GUIExecution.execution.length; agent++)
             c.push(GUIExecution.execution[agent][Math.min(GUIExecution.execution[agent].length - 1, t)]);
-        return c.map(GUIMap.numberToPoint);
+        return c;
     }
 
 
@@ -43,12 +40,19 @@ export class GUIExecution {
     }
 
 
-    static load(exec) {
+    static load(exec: Point[][]) {
         GUIExecution.execution = exec;
         GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
         GUIExecution.slider.oninput = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
         GUIExecution.slider.onchange = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
 
+    }
+
+
+    static reset() {
+        GUIExecution.execution = [];
+        GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
+        document.getElementById("config").innerHTML = "";
     }
 
     static compute() {
@@ -64,7 +68,7 @@ export class GUIExecution {
             if (response.ok) {
                 response.text().then((str) => {
                     // console.log(str);
-                    GUIExecution.load(eval(str));
+                    GUIExecution.load(eval(str).map((path) => path.map(GUIMap.numberToPoint)));
                 });
             }
         });

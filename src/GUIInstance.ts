@@ -1,3 +1,4 @@
+import { GUIExecution } from './GUIexecution.js';
 import { GUIMap } from './GUIMap.js';
 import { Instance } from './Instance.js';
 
@@ -23,13 +24,15 @@ export class GUIInstance {
      * @param pngFileName 
      * @description load the png file and produce a new instance based on it
      */
-    static load(pngFileName: string): void {
+    static async load(pngFileName: string): Promise<void> {
         const instance = new Instance();
         instance.pngFileName = pngFileName;
-        instance.init = [{ x: 1, y: 2 }, { x: 2, y: 4 }];
-        instance.target = [{ x: 5, y: 6 }, { x: 6, y: 3 }];
+        await GUIMap.load(pngFileName);
+        instance.init = [GUIMap.getRandomPoint(), GUIMap.getRandomPoint()];
+        instance.target = [GUIMap.getRandomPoint(), GUIMap.getRandomPoint()];
         instance.radius = parseInt(GUIInstance.inputRadius.value);
         GUIInstance.instance = instance;
+        GUIExecution.reset();
     }
 
     /**
@@ -47,7 +50,7 @@ export class GUIInstance {
      * update the GUI wrt the instance
      */
     static update() {
-        GUIMap.load(GUIInstance.instance.pngFileName);
+
         const initAndTargets = document.getElementById("initAndTargets");
         initAndTargets.innerHTML = "";
         for (let i = 0; i < GUIInstance.instance.init.length; i++)
