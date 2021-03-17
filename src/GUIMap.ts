@@ -1,4 +1,40 @@
 export class GUIMap {
+    static map: boolean[][];
+
+
+
+
+    private static _imgToBitMap(img: HTMLImageElement): boolean[][] {
+        const w = img.naturalWidth;
+        const h = img.naturalHeight;
+        const map: boolean[][] = [];
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        let data = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+        for (let x = 0; x < w; x++)
+            map[x] = [];
+
+        for (let y = 0; y < h; y++)
+            for (let x = 0; x < w; x++)
+                map[x][y] = data[(y * w + x) * 4] == 0;
+        return map;
+    }
+    static load(pngFileName: string) {
+        const img = <HTMLImageElement>document.getElementById("background");
+        img.src = "graphs/" + pngFileName;
+        img.onload = () => {
+            GUIMap.map= GUIMap._imgToBitMap(img);
+
+
+            const canvas
+            img.style.width = w * GUIMap.zoom + "px";
+            img.style.height = h * GUIMap.zoom + "px";
+        }
+    }
+
+
+
     static setPosition(element: HTMLElement, point: Point) {
         element.style.left = point.x * GUIMap.zoom + "px";
         element.style.top = point.y * GUIMap.zoom + "px";
@@ -12,7 +48,7 @@ export class GUIMap {
         return (<HTMLImageElement>document.getElementById("background")).width;
     }
 
-    static pointToNumber({x, y}: {x: number, y: number}) {
+    static pointToNumber({ x, y }: { x: number, y: number }) {
         return y * GUIMap.width + x;
     }
 
