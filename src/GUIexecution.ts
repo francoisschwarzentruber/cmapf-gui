@@ -41,11 +41,12 @@ export class GUIExecution {
 
 
     static load(exec: Point[][]) {
+        if (exec.length == 0)
+            throw "No solution";
         GUIExecution.execution = exec;
         GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
         GUIExecution.slider.oninput = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
         GUIExecution.slider.onchange = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
-
     }
 
 
@@ -67,7 +68,6 @@ export class GUIExecution {
         }).then((response) => {
             if (response.ok) {
                 response.text().then((str) => {
-                    // console.log(str);
                     GUIExecution.load(eval(str).map((path) => path.map(GUIMap.numberToPoint)));
                 });
             }
