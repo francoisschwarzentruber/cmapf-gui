@@ -12,21 +12,24 @@
 
   <div>
     <select id="selectPNGFileName"></select>
-    Radius: <input id="inputRadius" value="20"/>
+    <sep></sep>
+    Range of communication: <input id="inputRadius" value="20" />
+    <sep></sep>
     <button type="button" id="buttonNewAgent">+</button>
+    <sep></sep>
     <button type="button" id="buttonCompute" title="Compute an execution">Compute</button>
   </div>
   <div>
-  <input class="disabled" type="range" min="0" max="0" value="0" id="slider" />
+    <input class="disabled" type="range" min="0" max="0" value="0" id="slider" />
   </div>
-  <div id="map">    
+  <div id="map">
     <canvas id="background"></canvas>
     <svg id="paths"></svg>
     <svg id="communication"></svg>
     <div id="initAndTargets"></div>
     <div id="config"></div>
     <div hidden id="nosolution">No solution</div>
-    </div>
+  </div>
   </div>
 </body>
 
