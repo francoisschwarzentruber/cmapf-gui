@@ -37,34 +37,50 @@ export class GUIExecution {
         for (let agent = 0; agent < c.length; agent++) {
             document.getElementById("config").appendChild(GUIExecution.agentPointToHTMLElement(agent, c[agent]));
         }
+
+        document.getElementById("communication").innerHTML = "";
+        const r = GUIInstance.instance.radius;
+        for (let agent = 0; agent < c.length; agent++)
+            for (let agentb = agent + 1; agentb < c.length; agentb++) {
+                if ((c[agent].x - c[agentb].x) ** 2 + (c[agent].y - c[agentb].y) ** 2 <= r ** 2)
+                    document.getElementById("communication").appendChild(
+                        GUIExecution.getSVGPolyLine([c[agent], c[agentb]]));
+            }
+
     }
 
 
     static load(exec: Point[][]) {
-        if (exec.length == 0)
-            throw "No solution";
-        GUIExecution.execution = exec;
-        document.getElementById("paths").innerHTML = "";
-
-        for(const path of exec) {
-            document.getElementById("paths").appendChild(GUIExecution.getSVGPath(path));
+        if (exec.length == 0) {
+            document.getElementById("nosolution").hidden = false;
+            setTimeout(() => document.getElementById("nosolution").hidden = true, 2000);
         }
-        GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
-        const f = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
-        GUIExecution.slider.oninput = f;
-        GUIExecution.slider.onchange = f;
-        GUIExecution.slider.classList.remove("disabled");
-        f();
+        else {
+            GUIExecution.execution = exec;
+            document.getElementById("paths").innerHTML = "";
+
+            for (const path of exec) {
+                document.getElementById("paths").appendChild(GUIExecution.getSVGPolyLine(path));
+            }
+            GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
+            const f = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
+            GUIExecution.slider.oninput = f;
+            GUIExecution.slider.onchange = f;
+            GUIExecution.slider.classList.remove("disabled");
+            f();
+        }
     }
 
 
 
-    static getSVGPath(points: Point[]): SVGPolylineElement {
+    static getSVGPolyLine(points: Point[]): SVGPolylineElement {
         const svgns = "http://www.w3.org/2000/svg";
         const shape = document.createElementNS(svgns, "polyline");
         shape.setAttributeNS(null, 'points', points.map(GUIMap.getCenterCell).map((p) => p.x + "," + p.y).join(" "));
         return shape;
     }
+
+
 
     static reset() {
         GUIExecution.execution = [];
@@ -72,9 +88,11 @@ export class GUIExecution {
         document.getElementById("config").innerHTML = "";
         GUIExecution.slider.classList.add("disabled");
         document.getElementById("paths").innerHTML = "";
+        document.getElementById("communication").innerHTML = "";
     }
 
     static compute() {
+        GUIExecution.reset();
         var fd = new FormData();
         var data = GUIInstance.instance.toObject();
         for (var i in data) {

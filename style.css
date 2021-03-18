@@ -32,9 +32,7 @@
 }
 
 
-#config {
-    position: absolute;
-}
+
 
 #background {
     background-color: rgb(204, 255, 128);
@@ -50,11 +48,14 @@ img {
 }
 
 
-#paths {
+#nosolution,
+#config,
+#initAndTargets,
+#paths,
+#communication {
     position: absolute;
     left: 0px;
     top: 0px;
-
 }
 
 
@@ -62,4 +63,19 @@ img {
     stroke: gray;
     fill: none;
     stroke-dasharray: 2;
+}
+
+
+#nosolution {
+    background-color: white;
+    color: red;
+    opacity: 0.9;
+
+}
+
+#communication polyline {
+    stroke: blue;
+    fill: none;
+    stroke-dasharray: 2;
+    stroke-width: 2px;
 }
