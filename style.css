@@ -26,6 +26,7 @@
     opacity: 0.4;
     pointer-events: none;
 }
+
 #inputRadius {
     width: 80px;
 }
@@ -46,6 +47,19 @@ img {
 
 #map {
     position: absolute;
-    transform-origin: top left;
-    image-rendering: crisp-edges;
+}
+
+
+#paths {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+}
+
+
+#paths polyline {
+    stroke: gray;
+    fill: none;
+    stroke-dasharray: 2;
 }

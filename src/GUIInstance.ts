@@ -7,6 +7,7 @@ import { Instance } from './Instance.js';
 export class GUIInstance {
     private static _instance: Instance; // the instance (png file, init, target, radius)
 
+
     static set instance(instance: Instance) {
         GUIInstance._instance = instance;
         GUIInstance.update();
@@ -44,7 +45,17 @@ export class GUIInstance {
         (<HTMLInputElement>document.getElementById("selectPNGFileName")).value = initialPNGFileName;
         GUIInstance.load(initialPNGFileName);
         GUIInstance.inputRadius.oninput = () => { GUIInstance.instance.radius = parseInt(GUIInstance.inputRadius.value); };
+        document.getElementById("buttonNewAgent").onclick = GUIInstance.addAgent;
     }
+
+
+    static addAgent() {
+        GUIExecution.reset();
+        GUIInstance.instance.init.push(GUIMap.getRandomPoint());
+        GUIInstance.instance.target.push(GUIMap.getRandomPoint());
+        GUIInstance.update();
+    }
+
 
     /**
      * update the GUI wrt the instance

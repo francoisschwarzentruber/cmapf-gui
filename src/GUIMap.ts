@@ -11,6 +11,11 @@ export class GUIMap {
     }
 
 
+
+    static getCenterCell(p: Point): Point {
+        return { x: p.x * GUIMap.zoom + GUIMap.zoom / 2, y: p.y * GUIMap.zoom + GUIMap.zoom / 2 };
+    }
+
     static getRandomPoint(): Point {
         let i = 100;
         while (i > 0) {
@@ -51,6 +56,10 @@ export class GUIMap {
             img.src = "graphs/" + pngFileName;
             img.onload = () => {
                 GUIMap.map = GUIMap._imgToBitMap(img);
+                document.getElementById("paths").style.width = GUIMap.width * GUIMap.zoom + "px";
+                document.getElementById("paths").style.height = GUIMap.height * GUIMap.zoom + "px";
+                document.getElementById("communication").style.width = GUIMap.width * GUIMap.zoom + "px";
+                document.getElementById("communication").style.height = GUIMap.height * GUIMap.zoom + "px";
                 GUIMap.drawMap();
                 resolve();
             }

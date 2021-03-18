@@ -44,6 +44,11 @@ export class GUIExecution {
         if (exec.length == 0)
             throw "No solution";
         GUIExecution.execution = exec;
+        document.getElementById("paths").innerHTML = "";
+
+        for(const path of exec) {
+            document.getElementById("paths").appendChild(GUIExecution.getSVGPath(path));
+        }
         GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
         const f = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
         GUIExecution.slider.oninput = f;
@@ -53,11 +58,20 @@ export class GUIExecution {
     }
 
 
+
+    static getSVGPath(points: Point[]): SVGPolylineElement {
+        const svgns = "http://www.w3.org/2000/svg";
+        const shape = document.createElementNS(svgns, "polyline");
+        shape.setAttributeNS(null, 'points', points.map(GUIMap.getCenterCell).map((p) => p.x + "," + p.y).join(" "));
+        return shape;
+    }
+
     static reset() {
         GUIExecution.execution = [];
         GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
         document.getElementById("config").innerHTML = "";
         GUIExecution.slider.classList.add("disabled");
+        document.getElementById("paths").innerHTML = "";
     }
 
     static compute() {
