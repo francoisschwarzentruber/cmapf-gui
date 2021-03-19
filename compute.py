@@ -4,6 +4,8 @@ import create_graph_from_png
 import json
 import subprocess
 
+TIMEOUT = 10
+
 if __name__ == "__main__":
     if len(sys.argv) != 5:
         print('Error! Wrong argument count!')
@@ -30,7 +32,7 @@ if __name__ == "__main__":
             filehandle.write(' ' + str(t))
         filehandle.write(' \n')
     filehandle.close()
-    proc = subprocess.Popen(["timeout 10s ./ccbs.out --graph-folder graphs/ --exp exps/1.exp --collisionfree true "], stdout=subprocess.PIPE, shell=True)
+    proc = subprocess.Popen(["timeout " + str(TIMEOUT) + "s ./ccbs.out --graph-folder graphs/ --exp exps/1.exp --collisionfree true "], stdout=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
 
     # Parse output for solution

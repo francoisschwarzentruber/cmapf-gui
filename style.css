@@ -47,7 +47,14 @@ img {
 
 #map {
     position: absolute;
+    border: 1px solid black;
 }
+
+
+#slider {
+    width:90%;
+}
+
 
 
 #nosolution,
@@ -72,7 +79,7 @@ img {
     background-color: white;
     color: red;
     opacity: 0.9;
-
+    visibility: hidden;
 }
 
 
@@ -103,4 +110,20 @@ img {
     animation-name: communicationEdgeActiveAnimation;
     animation-duration: 1s;
     animation-iteration-count: infinite;
+}
+
+
+.vertical {
+    display: block;
+}
+
+body {
+    margin-top:0px;
+}
+
+
+#toolbar {
+    margin-bottom: 16px;
+    padding: 16px;
+    background-color: aliceblue;
 }
