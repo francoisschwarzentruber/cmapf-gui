@@ -10,6 +10,9 @@ Graphical tool to visualize CMAPF executions.
      sudo dnf install php
      tsc
     
+Then add the program ccbs.out at the root of that folder.
+
+
 ## To run the tool
 
     runlocally.sh
