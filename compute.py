@@ -32,7 +32,7 @@ if __name__ == "__main__":
             filehandle.write(' ' + str(t))
         filehandle.write(' \n')
     filehandle.close()
-    proc = subprocess.Popen(["timeout " + str(TIMEOUT) + "s ./ccbs.out --graph-folder graphs/ --exp exps/1.exp --collisionfree true "], stdout=subprocess.PIPE, shell=True)
+    proc = subprocess.Popen(["timeout " + str(TIMEOUT) + "s ./ccbs.out --graph-folder graphs/ --exp exps/1.exp --collisionfree false "], stdout=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
 
     # Parse output for solution
