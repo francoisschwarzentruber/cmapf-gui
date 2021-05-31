@@ -1,6 +1,11 @@
 import { GUIExecution } from './GUIexecution.js';
 import { Point } from './Point.js';
 
+
+
+/**
+ * the map of an area
+ */
 export class GUIMap {
 
 
@@ -12,12 +17,19 @@ export class GUIMap {
         GUIMap.imgObstacle.src = "img/obstacle.png";
     }
 
-
-
+    /**
+     * 
+     * @param p the "logical" coordinate of the cell
+     * @returns the "physical" coordinate in the canvas
+     */
     static getCenterCell(p: Point): Point {
         return { x: p.x * GUIMap.zoom + GUIMap.zoom / 2, y: p.y * GUIMap.zoom + GUIMap.zoom / 2 };
     }
 
+
+    /**
+     * @returns "logical" coordinate in which there is no obstacle
+     */
     static getRandomPoint(): Point {
         let i = 100;
         while (i > 0) {
@@ -51,6 +63,7 @@ export class GUIMap {
         return map;
     }
 
+
     static load(pngFileName: string): Promise<void> {
         return new Promise((resolve, reject) => {
             console.log("loading png")
@@ -68,6 +81,9 @@ export class GUIMap {
         });
     }
 
+    /**
+     * draw the map on the canvas
+     */
     static drawMap() {
         const canvas = <HTMLCanvasElement>document.getElementById("background");
         canvas.width = this.width * GUIMap.zoom;
@@ -78,23 +94,34 @@ export class GUIMap {
                     canvas.getContext('2d').drawImage(GUIMap.imgObstacle, x * GUIMap.zoom, y * GUIMap.zoom, 32, 32);
     }
 
+    /**
+     * 
+     * @param element 
+     * @param point 
+     * @description set the position of the HTMLElement element at point ("physical" coordinate)
+     */
     static setPosition(element: HTMLElement, point: Point) {
         element.style.left = point.x * GUIMap.zoom + "px";
         element.style.top = point.y * GUIMap.zoom + "px";
     }
 
-    static get zoom(): number {
-        return 32;
-    }
+    /**
+     * size in pixels of a cell
+     */
+    static get zoom(): number { return 32; }
 
-    static get width(): number {
-        return this.map.length;
-    }
+    /**
+     * "logical" width and height
+     */
+    static get width(): number { return this.map.length; }
+    static get height(): number { return this.map[0].length; }
 
-    static get height(): number {
-        return this.map[0].length;
-    }
-
+    /**
+     * 
+     * @param p 
+     * @returns the label of the node at p where p has no obstacle
+     * the label is an integer obtained by reading top to bottom, left to right and ignoring the obstacle cells
+     */
     static pointToNumber(p: Point) {
         let index = 0;
         for (let x = 0; x < GUIMap.height; x++)
@@ -111,6 +138,11 @@ export class GUIMap {
     }
 
 
+    /**
+     * 
+     * @param i 
+     * @returns the coordinate of the node of label i (see pointToNumber)
+     */
     static numberToPoint(i: number) {
         let index = 0;
         for (let x = 0; x < GUIMap.height; x++)
@@ -120,9 +152,7 @@ export class GUIMap {
                 if (!GUIMap.map[y][x])
                     index++;
             }
-
-
-
+            
         for (let x = 0; x < GUIMap.width; x++)
             for (let y = 0; y < GUIMap.height; y++) {
                 if (!GUIMap.map[x][y] && index == i) return { x: x, y: y };

@@ -94,9 +94,9 @@ export class GUIExecution {
 
     static compute() {
         GUIExecution.reset();
-        var fd = new FormData();
-        var data = GUIInstance.instance.toObject();
-        for (var i in data) {
+        const fd = new FormData();
+        const data = GUIInstance.instance.toObject();
+        for (const i in data) {
             fd.append(i, JSON.stringify(data[i]));
         }
         fetch("compute.php", {

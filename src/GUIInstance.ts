@@ -3,7 +3,9 @@ import { GUIMap } from './GUIMap.js';
 import { Instance } from './Instance.js';
 
 
-
+/**
+ * this static class enables to show an instance
+ */
 export class GUIInstance {
     private static _instance: Instance; // the instance (png file, init, target, radius)
 
@@ -48,7 +50,9 @@ export class GUIInstance {
         document.getElementById("buttonNewAgent").onclick = GUIInstance.addAgent;
     }
 
-
+    /**
+     * @description add a new agent in the instance
+     */
     static addAgent() {
         GUIExecution.reset();
         GUIInstance.instance.init.push(GUIMap.getRandomPoint());
@@ -58,7 +62,7 @@ export class GUIInstance {
 
 
     /**
-     * update the GUI wrt the instance
+     * @description update the GUI wrt the instance
      */
     static update() {
 
