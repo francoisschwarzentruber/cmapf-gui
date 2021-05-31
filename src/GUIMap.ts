@@ -1,4 +1,6 @@
 import { GUIExecution } from './GUIexecution.js';
+import { Point } from './Point.js';
+
 export class GUIMap {
 
 

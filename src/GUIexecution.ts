@@ -1,5 +1,6 @@
 import { GUIInstance } from './GUIInstance.js';
 import { GUIMap } from './GUIMap.js';
+import { Point } from './Point.js';
 
 export class GUIExecution {
     static execution: Point[][];
