@@ -92,10 +92,15 @@ export class GUIExecution {
         document.getElementById("communication").innerHTML = "";
     }
 
+    /**
+     * call the tool on the server, that is the file compute.php
+     */
     static compute() {
         GUIExecution.reset();
         const fd = new FormData();
         const data = GUIInstance.instance.toObject();
+        console.log("instance is:");
+        console.log(data);
         for (const i in data) {
             fd.append(i, JSON.stringify(data[i]));
         }

@@ -204,7 +204,11 @@ def create_comm_graph_los(G_E, im_array=None):
     return G_C
 
 
+
 def cgfpng(radius, png):
+    # radius 
+    # png = filename
+    # return the filenames of first the movement graph, then the communication graph
     RADIUS = radius
     MAP = png
 
@@ -233,9 +237,11 @@ def cgfpng(radius, png):
         print('Error! Physical discretization not supported!')
         exit(1)
 
-    G_E.write(gflags.FLAGS.output_phys + '_' + gflags.FLAGS.phys_discr_type + '_' + \
+    physFileName = gflags.FLAGS.output_phys + '_' + gflags.FLAGS.phys_discr_type + '_' + \
               str(gflags.FLAGS.cell_size) + '_' + gflags.FLAGS.comm_discr_type + '_' + \
-              str(gflags.FLAGS.range) + '.graphml', format='graphml')
+              str(gflags.FLAGS.range) + '.graphml'
+
+    G_E.write(physFileName, format='graphml')
 
     if gflags.FLAGS.comm_discr_type == 'range':
         G_C = create_comm_graph_range(G_E, im_array)    
@@ -245,9 +251,11 @@ def cgfpng(radius, png):
         print('Error! Comm discretization not supported!')
         exit(1)
 
-    G_C.write(gflags.FLAGS.output_comm + '_' + gflags.FLAGS.phys_discr_type + '_' + \
+    commFileName = gflags.FLAGS.output_comm + '_' + gflags.FLAGS.phys_discr_type + '_' + \
               str(gflags.FLAGS.cell_size) + '_' + gflags.FLAGS.comm_discr_type + '_' + \
-              str(gflags.FLAGS.range) + '.graphml', format='graphml')
+              str(gflags.FLAGS.range) + '.graphml'
+    G_C.write(commFileName, format='graphml')
 
+    return physFileName, commFileName
 
 

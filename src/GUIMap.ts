@@ -59,7 +59,6 @@ export class GUIMap {
         for (let y = 0; y < h; y++)
             for (let x = 0; x < w; x++)
                 map[x][y] = data[(y * w + x) * 4] == 0; //0 = black = obstacle
-        console.log(map);
         return map;
     }
 
