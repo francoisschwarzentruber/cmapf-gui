@@ -17,7 +17,7 @@ def getSolutionFromDivideAndConquerAlgorithm(init, target, physFileName, commFil
 
 
 
-def getSolutionCpluplusTool():
+def getSolutionCpluplusTool(init, target, radius, png):
     createExperienceFile(init, target, radius, png)
     proc = subprocess.Popen(
         ["timeout " + str(TIMEOUT) + "s ./ccbs.out --graph-folder graphs/ --exp exps/1.exp --collisionfree false "], stdout=subprocess.PIPE, shell=True)
