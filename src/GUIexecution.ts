@@ -110,6 +110,7 @@ export class GUIExecution {
         }).then((response) => {
             if (response.ok) {
                 response.text().then((str) => {
+                    console.log(str);
                     GUIExecution.load(eval(str).map((path) => path.map(GUIMap.numberToPoint)));
                 });
             }
