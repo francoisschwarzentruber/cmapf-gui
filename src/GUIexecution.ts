@@ -112,6 +112,7 @@ export class GUIExecution {
                 response.text().then((str) => {
                     console.log(str);
                     const lines = str.split("\n");
+                    lines.filter((line) => line != "");
                     const lastline = lines[lines.length-1];
                     GUIExecution.load(eval(lastline).map((path) => path.map(GUIMap.numberToPoint)));
                 });
