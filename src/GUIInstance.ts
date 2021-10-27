@@ -4,7 +4,10 @@ import { Instance } from './Instance.js';
 
 
 /**
- * this static class enables to show an instance
+ * this static class enables to show an instance. An instance is made up of:
+ * - the graph (that comes from a .png)
+ * - the initial configuration
+ * - the target configuration
  */
 export class GUIInstance {
     private static _instance: Instance; // the instance (png file, init, target, radius)
@@ -15,10 +18,7 @@ export class GUIInstance {
         GUIInstance.update();
     }
 
-    static get instance(): Instance {
-        return GUIInstance._instance;
-
-    }
+    static get instance(): Instance { return GUIInstance._instance; }
 
     static get inputRadius(): HTMLInputElement { return <HTMLInputElement>document.getElementById("inputRadius"); };
 
@@ -61,11 +61,21 @@ export class GUIInstance {
     }
 
 
+
+
+    static setInitialTargetConfigurations(initConfig, targetConfig) {
+        GUIInstance.instance.init = initConfig;
+        GUIInstance.instance.target = targetConfig;
+        GUIInstance.update();
+    }
+
+
+
+
     /**
      * @description update the GUI wrt the instance
      */
     static update() {
-
         const initAndTargets = document.getElementById("initAndTargets");
         initAndTargets.innerHTML = "";
         for (let i = 0; i < GUIInstance.instance.init.length; i++)

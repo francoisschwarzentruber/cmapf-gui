@@ -159,6 +159,8 @@ export class GUIMap {
                 if (!GUIMap.map[x][y])
                     index++;
             }
+
+        throw "index " + i + " is an incorrect label for node."
     }
 
     static forAgentNumber(element: HTMLElement, i: number) {

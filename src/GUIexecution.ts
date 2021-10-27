@@ -2,23 +2,56 @@ import { GUIInstance } from './GUIInstance.js';
 import { GUIMap } from './GUIMap.js';
 import { Point } from './Point.js';
 
+
+
+
+class Execution {
+    constructor(private paths: Point[][]) { }
+
+    get agents() {
+        const nbAgents = this.paths.length;
+        return Array.from(Array(nbAgents).keys())
+    }
+
+    config(t: number) {
+        const c = [];
+        for (let agent of this.agents) {
+            console.log(agent)
+            c.push(this.paths[agent][Math.min(this.paths[agent].length - 1, t)]);
+        }
+
+        return c;
+    }
+
+    path(agent) {
+        return this.paths[agent];
+    }
+
+    get length() { return Math.max(...this.paths.map((path) => path.length)); }
+
+}
+
+
+
+/**
+ * @param str a string that represents an execution e.g. "[[1,10,9,8,18,25,32,40,41,42],[65,66,61,62,63,56,50,51,44,45]]"
+ *        (an array of paths)
+ * @return the execution corresponding to str
+ */
+function textToExecution(str: string): Execution {
+    return new Execution(eval(str).map((path) => path.map(GUIMap.numberToPoint)));
+}
+
+
+
 export class GUIExecution {
-    static execution: Point[][];
+    static execution: Execution;
 
     static init() { document.getElementById("buttonCompute").onclick = GUIExecution.compute; }
 
     static get slider() { return (document.getElementById("slider") as HTMLInputElement); }
     static get sliderValue() { return parseInt(GUIExecution.slider.value); }
 
-
-    static executionLength(): number { return Math.max(...GUIExecution.execution.map((path) => path.length)); }
-
-    static config(t: number) {
-        let c = [];
-        for (let agent = 0; agent < GUIExecution.execution.length; agent++)
-            c.push(GUIExecution.execution[agent][Math.min(GUIExecution.execution[agent].length - 1, t)]);
-        return c;
-    }
 
 
     static agentPointToHTMLElement(i: number, vertex: { x: number, y: number }) {
@@ -32,7 +65,7 @@ export class GUIExecution {
 
 
     static showConfig(t: number) {
-        const c = GUIExecution.config(t);
+        const c = GUIExecution.execution.config(t);
         document.getElementById("config").innerHTML = "";
 
         for (let agent = 0; agent < c.length; agent++) {
@@ -51,7 +84,8 @@ export class GUIExecution {
     }
 
 
-    static load(exec: Point[][]) {
+    static loadFromString(execStr: string) {
+        const exec = textToExecution(execStr);
         if (exec.length == 0) {
             document.getElementById("nosolution").hidden = false;
             setTimeout(() => document.getElementById("nosolution").hidden = true, 2000);
@@ -60,10 +94,12 @@ export class GUIExecution {
             GUIExecution.execution = exec;
             document.getElementById("paths").innerHTML = "";
 
-            for (const path of exec) {
-                document.getElementById("paths").appendChild(GUIExecution.getSVGPolyLine(path));
+            for (const agent of exec.agents) {
+                document.getElementById("paths").appendChild(GUIExecution.getSVGPolyLine(exec.path(agent)));
             }
-            GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
+
+            GUIInstance.setInitialTargetConfigurations(exec.config(0), exec.config(exec.length-1));
+            GUIExecution.slider.setAttribute("max", GUIExecution.execution.length + "");
             const f = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
             GUIExecution.slider.oninput = f;
             GUIExecution.slider.onchange = f;
@@ -84,8 +120,8 @@ export class GUIExecution {
 
 
     static reset() {
-        GUIExecution.execution = [];
-        GUIExecution.slider.setAttribute("max", GUIExecution.executionLength() + "");
+        GUIExecution.execution = undefined;
+        GUIExecution.slider.setAttribute("max", 0 + "");
         document.getElementById("config").innerHTML = "";
         GUIExecution.slider.classList.add("disabled");
         document.getElementById("paths").innerHTML = "";
@@ -113,9 +149,9 @@ export class GUIExecution {
                     console.log(str);
                     let lines = str.split("\n");
                     lines = lines.filter((line) => line != "");
-                    const lastline = lines[lines.length-1];
+                    const lastline = lines[lines.length - 1];
                     console.log(lastline);
-                    GUIExecution.load(eval(lastline).map((path) => path.map(GUIMap.numberToPoint)));
+                    GUIExecution.loadFromString(lastline);
                 });
             }
         });

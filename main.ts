@@ -10,4 +10,8 @@ window.onload = () => {
     GUIPngFileNames.init();
     GUIInstance.init();
     GUIExecution.init();
+
+    document.getElementById("execution").oninput = () => {
+        GUIExecution.loadFromString((<HTMLTextAreaElement> document.getElementById("execution")).value);
+    }
 }

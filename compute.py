@@ -54,8 +54,8 @@ def createExperienceFile(init, target, radius, png):  # Create experience file
 
 def main(init, target, radius, png):
     physFileName, commFileName = create_graph_from_png.cgfpng(radius, png) # Create graph (physical and comm)
-   # solution = getSolutionCpluplusTool(init, target, radius, png)
-    solution = getSolutionFromDivideAndConquerAlgorithm(init, target, physFileName, commFileName)
+    solution = getSolutionCpluplusTool(init, target, radius, png)
+   # solution = getSolutionFromDivideAndConquerAlgorithm(init, target, physFileName, commFileName)
     print(solution)
 
 
