@@ -13,13 +13,11 @@ class Execution {
         return Array.from(Array(nbAgents).keys())
     }
 
-    config(t: number) {
+    config(t: number): Point[] {
         const c = [];
         for (let agent of this.agents) {
-            console.log(agent)
             c.push(this.paths[agent][Math.min(this.paths[agent].length - 1, t)]);
         }
-
         return c;
     }
 
