@@ -89,15 +89,14 @@ export class GUIInstance {
         img.classList.add("init");
         img.src = "img/init.png";
         GUIMap.setPosition(img, GUIInstance.instance.init[i]);
-        GUIMap.forAgentNumber(img, i);
+        GUIMap.setAgentColor(img, i);
         GUIMap.draggable(img, () => {
-            GUIInstance.instance.init[i] = {
-                x: img.offsetLeft / GUIMap.zoom,
-                y: img.offsetTop / GUIMap.zoom
-            };
+            GUIInstance.instance.init[i] = GUIInstance.getPointFromIconPosition(img);
         });
         return img;
     }
+
+
 
 
     static targetPointToHTMLElement(i: number) {
@@ -105,13 +104,22 @@ export class GUIInstance {
         img.classList.add("init");
         img.src = "img/target.png";
         GUIMap.setPosition(img, GUIInstance.instance.target[i]);
-        GUIMap.forAgentNumber(img, i);
+        GUIMap.setAgentColor(img, i);
         GUIMap.draggable(img, () => {
-            GUIInstance.instance.target[i] = {
-                x: img.offsetLeft / GUIMap.zoom,
-                y: img.offsetTop / GUIMap.zoom
-            };
+            GUIInstance.instance.target[i] = GUIInstance.getPointFromIconPosition(img);
         });
         return img;
+    }
+
+
+
+    /**
+     * @returns the coordinate in the map from the coordinate of the icon img
+     */
+    static getPointFromIconPosition(img: HTMLElement) {
+        return {
+            x: Math.floor((img.offsetLeft + 16) / GUIMap.zoom),
+            y: Math.floor((img.offsetTop + 32) / GUIMap.zoom)
+        };
     }
 }

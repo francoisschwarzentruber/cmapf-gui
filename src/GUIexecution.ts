@@ -52,12 +52,12 @@ export class GUIExecution {
 
 
 
-    static agentPointToHTMLElement(i: number, vertex: { x: number, y: number }) {
+    static agentPointToHTMLElement(agentNumber: number, vertex: { x: number, y: number }) {
         const img = new Image();
         img.classList.add("agent");
         img.src = "img/agent.png";
         GUIMap.setPosition(img, vertex);
-        GUIMap.forAgentNumber(img, i);
+        GUIMap.setAgentColor(img, agentNumber);
         return img;
     }
 
