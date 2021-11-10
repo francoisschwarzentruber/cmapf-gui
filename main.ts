@@ -12,6 +12,7 @@ window.onload = () => {
     GUIExecution.init();
 
     const textArea = <HTMLTextAreaElement> document.getElementById("textarea");
+    
     const updateCurrentExecutionTextArea = () => {
         const nbLine = textArea.value.substr(0, textArea.selectionStart).split("\n").length-1;
         const line = textArea.value.split("\n")[nbLine];

@@ -88,23 +88,31 @@ export class GUIExecution {
     }
 
 
+    /**
+     * 
+     * @param inputStr 
+     * @description load the content of the inputStr which is one line.
+     * inputStr should be either of the form "<1, 4, 9>" and thus represents a configuration.
+     * Or it is of the "[[1, 5, 6], [2, 9, 4]]" and represents an execution (here, in the example, an execution
+     * of length 3 for two agents)
+     */
     static loadFromString(inputStr: string) {
         if (inputStr.startsWith("<")) {
-            GUIExecution.loadConfigurationFromString(inputStr);
+            GUIExecution.showConfigurationFromString(inputStr);
         }
         else
-            GUIExecution.loadExecutionFromString(inputStr);
+            GUIExecution.showExecutionFromString(inputStr);
 
     }
 
 
     
-    static loadConfigurationFromString(inputStr: string) {
+    static showConfigurationFromString(inputStr: string) {
         GUIExecution.reset();
         GUIExecution.showConfig(textToConfig(inputStr));
     }
 
-    static loadExecutionFromString(inputStr) {
+    static showExecutionFromString(inputStr) {
         const exec = textToExecution(inputStr);
         if (exec.length == 0) {
             document.getElementById("nosolution").hidden = false;
