@@ -42,6 +42,13 @@ function textToExecution(str: string): Execution {
 
 
 
+function textToConfig(str: string) : Point[] {
+    const Astr = str.replace("<", "[").replace(">", "]");
+    return eval(Astr).map(GUIMap.numberToPoint);
+}
+
+
+
 export class GUIExecution {
     static execution: Execution;
 
@@ -62,8 +69,7 @@ export class GUIExecution {
     }
 
 
-    static showConfig(t: number) {
-        const c = GUIExecution.execution.config(t);
+    static showConfig(c: Point[]) {
         document.getElementById("config").innerHTML = "";
 
         for (let agent = 0; agent < c.length; agent++) {
@@ -82,8 +88,24 @@ export class GUIExecution {
     }
 
 
-    static loadFromString(execStr: string) {
-        const exec = textToExecution(execStr);
+    static loadFromString(inputStr: string) {
+        if (inputStr.startsWith("<")) {
+            GUIExecution.loadConfigurationFromString(inputStr);
+        }
+        else
+            GUIExecution.loadExecutionFromString(inputStr);
+
+    }
+
+
+    
+    static loadConfigurationFromString(inputStr: string) {
+        GUIExecution.reset();
+        GUIExecution.showConfig(textToConfig(inputStr));
+    }
+
+    static loadExecutionFromString(inputStr) {
+        const exec = textToExecution(inputStr);
         if (exec.length == 0) {
             document.getElementById("nosolution").hidden = false;
             setTimeout(() => document.getElementById("nosolution").hidden = true, 2000);
@@ -96,16 +118,15 @@ export class GUIExecution {
                 document.getElementById("paths").appendChild(GUIExecution.getSVGPolyLine(exec.path(agent)));
             }
 
-            GUIInstance.setInitialTargetConfigurations(exec.config(0), exec.config(exec.length-1));
+            GUIInstance.setInitialTargetConfigurations(exec.config(0), exec.config(exec.length - 1));
             GUIExecution.slider.setAttribute("max", GUIExecution.execution.length + "");
-            const f = () => { GUIExecution.showConfig(GUIExecution.sliderValue) };
+            const f = () => { GUIExecution.showConfig(GUIExecution.execution.config(GUIExecution.sliderValue)) };
             GUIExecution.slider.oninput = f;
             GUIExecution.slider.onchange = f;
             GUIExecution.slider.classList.remove("disabled");
             f();
         }
     }
-
 
 
     static getSVGPolyLine(points: Point[]): SVGPolylineElement {
