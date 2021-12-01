@@ -38,19 +38,20 @@ def getSolutionCpluplusTool(init, target, radius, pngFileName):
         ["timeout " + str(TIMEOUT) + "s ./ccbs.out --graph-folder graphs/ --exp exps/1.exp --collisionfree false "], stdout=subprocess.PIPE, shell=True)
          #["timeout " + str(TIMEOUT) + "s ../projet/cmapf_solver/build/console_main --algo CMARRT--graph-folder graphs/ --exp exps/1.exp --collisionfree false "], stdout=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
+    return str(out)
 
     # Parse output for solution
-  #  try:     
-   #     outSplit = str(out).split("\\n")
-    ##    lastLine = out[len(outSplit)-2]
-    #    solution = lastLine.split("    ")[1]
-    #    solution = solution.replace('{', '[')
-    #    solution = solution.replace('}', ']')
-    #    solution = '[' + solution + ']'
-     #   return solution
-   # except:
-   #     return out
-   return out
+    try:     
+        outSplit = str(out).split("\\n")
+        lastLine = out[len(outSplit)-2]
+        solution = lastLine.split("    ")[1]
+        solution = solution.replace('{', '[')
+        solution = solution.replace('}', ']')
+        solution = '[' + solution + ']'
+        return solution
+    except:
+        return out
+    
 
 
 def createExperienceFile(init, target, radius, pngFileName):  # Create experience file

@@ -174,6 +174,7 @@ export class GUIExecution {
         }).then((response) => {
             if (response.ok) {
                 response.text().then((str) => {
+                    console.log(str);
                     (<HTMLTextAreaElement>document.getElementById("textarea")).value = str;
                     /*let lines = str.split("\n");
                     lines = lines.filter((line) => line != "");
