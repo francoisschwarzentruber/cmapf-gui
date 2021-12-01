@@ -33,16 +33,17 @@ class Execution {
 
 /**
  * @param str a string that represents an execution e.g. "[[1,10,9,8,18,25,32,40,41,42],[65,66,61,62,63,56,50,51,44,45]]"
- *        (an array of paths)
+ *        (an array of paths), or "{[1,10,9,8,18,25,32,40,41,42],[65,66,61,62,63,56,50,51,44,45]}"
  * @return the execution corresponding to str
  */
 function textToExecution(str: string): Execution {
-    return new Execution(eval(str).map((path) => path.map(GUIMap.numberToPoint)));
+    const s = str.replace("{", "[").replace("}", "]");
+    return new Execution(eval(s).map((path) => path.map(GUIMap.numberToPoint)));
 }
 
 
 
-function textToConfig(str: string) : Point[] {
+function textToConfig(str: string): Point[] {
     const Astr = str.replace("<", "[").replace(">", "]");
     return eval(Astr).map(GUIMap.numberToPoint);
 }
@@ -106,7 +107,7 @@ export class GUIExecution {
     }
 
 
-    
+
     static showConfigurationFromString(inputStr: string) {
         GUIExecution.reset();
         GUIExecution.showConfig(textToConfig(inputStr));
@@ -173,14 +174,12 @@ export class GUIExecution {
         }).then((response) => {
             if (response.ok) {
                 response.text().then((str) => {
-                    console.log("OUTPUT OF THE TOOL:")
-                    console.log(str);
-                    console.log("END OUTPUT OF THE TOOL")
-                    let lines = str.split("\n");
+                    (<HTMLTextAreaElement>document.getElementById("textarea")).value = str;
+                    /*let lines = str.split("\n");
                     lines = lines.filter((line) => line != "");
                     const lastline = lines[lines.length - 1];
                     console.log(lastline);
-                    GUIExecution.loadFromString(lastline);
+                    GUIExecution.loadFromString(lastline);*/
                 });
             }
         });

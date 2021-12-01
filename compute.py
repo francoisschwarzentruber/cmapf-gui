@@ -40,16 +40,17 @@ def getSolutionCpluplusTool(init, target, radius, pngFileName):
     (out, err) = proc.communicate()
 
     # Parse output for solution
-    try:     
-        outSplit = str(out).split("\\n")
-        lastLine = outSplit[len(outSplit)-2]
-        solution = lastLine.split("    ")[1]
-        solution = solution.replace('{', '[')
-        solution = solution.replace('}', ']')
-        solution = '[' + solution + ']'
-        return solution
-    except:
-        return out
+  #  try:     
+   #     outSplit = str(out).split("\\n")
+    ##    lastLine = out[len(outSplit)-2]
+    #    solution = lastLine.split("    ")[1]
+    #    solution = solution.replace('{', '[')
+    #    solution = solution.replace('}', ']')
+    #    solution = '[' + solution + ']'
+     #   return solution
+   # except:
+   #     return out
+   return out
 
 
 def createExperienceFile(init, target, radius, pngFileName):  # Create experience file
