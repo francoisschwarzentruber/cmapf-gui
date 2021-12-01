@@ -1,3 +1,4 @@
+import { GUIInstance } from './GUIInstance.js';
 import { GUIExecution } from './GUIexecution.js';
 import { Point } from './Point.js';
 
@@ -11,7 +12,7 @@ export class GUIMap {
 
     static map: boolean[][]; //bitmap of the map (used like map[x][y]). True means obstacle.
     static imgObstacle = new Image(); //image of the obstacle
-
+    static imgMap = new Image();
 
     static init() {
         GUIMap.imgObstacle.src = "img/obstacle.png";
@@ -69,7 +70,9 @@ export class GUIMap {
             const img = new Image();
             img.src = "graphs/" + pngFileName;
             img.onload = () => {
+                GUIMap.imgMap = img;
                 GUIMap.map = GUIMap._imgToBitMap(img);
+
                 document.getElementById("paths").style.width = GUIMap.width * GUIMap.zoom + "px";
                 document.getElementById("paths").style.height = GUIMap.height * GUIMap.zoom + "px";
                 document.getElementById("communication").style.width = GUIMap.width * GUIMap.zoom + "px";
@@ -87,27 +90,41 @@ export class GUIMap {
         const canvas = <HTMLCanvasElement>document.getElementById("background");
         canvas.width = this.width * GUIMap.zoom;
         canvas.height = this.height * GUIMap.zoom;
-        for (let x = 0; x < GUIMap.width; x++)
-            for (let y = 0; y < GUIMap.height; y++)
-                if (GUIMap.map[x][y])
-                    canvas.getContext('2d').drawImage(GUIMap.imgObstacle, x * GUIMap.zoom, y * GUIMap.zoom, 32, 32);
+        const ctx = canvas.getContext('2d');
+
+        if(GUIMap.zoom < 2) {
+            ctx.drawImage(GUIMap.imgMap, 0, 0, canvas.width, canvas.height);
+        }
+        else {
+            ctx.fillStyle = "green";
+            for (let x = 0; x < GUIMap.width; x++)
+                for (let y = 0; y < GUIMap.height; y++)
+                    if (GUIMap.map[x][y])
+                        canvas.getContext('2d').drawImage(GUIMap.imgObstacle, x * GUIMap.zoom, y * GUIMap.zoom, GUIMap.zoom, GUIMap.zoom);
+                        //ctx.fillRect(x * GUIMap.zoom, y * GUIMap.zoom, GUIMap.zoom, GUIMap.zoom);
+        }
+
+        
     }
 
     /**
      * 
      * @param element 
      * @param point 
-     * @description set the position of the HTMLElement element at point ("physical" coordinate)
+     * @description set the position of the HTMLElement element which is an image of height and width 32*32 at point ("physical" coordinate)
      */
     static setPosition(element: HTMLElement, point: Point) {
-        element.style.left = point.x * GUIMap.zoom + "px";
-        element.style.top = point.y * GUIMap.zoom + "px";
+        element.style.left = (point.x * GUIMap.zoom + GUIMap.zoom / 2 - 16) + "px";
+        element.style.top = (point.y * GUIMap.zoom  + GUIMap.zoom / 2 - 32) + "px";
     }
 
     /**
      * size in pixels of a cell
      */
-    static get zoom(): number { return 32; }
+    static get zoom(): number {
+        //    return 32; 
+        return 800 / GUIMap.imgMap.width;
+    }
 
     /**
      * "logical" width and height
@@ -151,7 +168,7 @@ export class GUIMap {
                 if (!GUIMap.map[y][x])
                     index++;
             }
-            
+
         for (let x = 0; x < GUIMap.width; x++)
             for (let y = 0; y < GUIMap.height; y++) {
                 if (!GUIMap.map[x][y] && index == i) return { x: x, y: y };
@@ -159,10 +176,20 @@ export class GUIMap {
                 if (!GUIMap.map[x][y])
                     index++;
             }
+
+        throw "index " + i + " is an incorrect label for node."
     }
 
-    static forAgentNumber(element: HTMLElement, i: number) {
-        element.style.filter = `hue-rotate(${i * 50}deg)`;
+
+
+    /**
+     * 
+     * @param element 
+     * @param agentNumber 
+     * @description apply the color for the agent number 
+     */
+    static setAgentColor(element: HTMLElement, agentNumber: number) {
+        element.style.filter = `hue-rotate(${agentNumber * 50}deg)`;
     }
 
 
@@ -183,7 +210,7 @@ export class GUIMap {
             y = evt.clientY;
             map.onmousemove = elementDrag;
             map.onmouseup = closeDragElement;
-            initPoint = { x: Math.floor(element.offsetLeft / GUIMap.zoom), y: Math.floor(element.offsetTop / GUIMap.zoom) };
+            initPoint = GUIInstance.getPointFromIconPosition(element);//{ x: Math.floor(element.offsetLeft / GUIMap.zoom), y: Math.floor(element.offsetTop / GUIMap.zoom) };
             console.log(initPoint)
         }
 
@@ -209,19 +236,19 @@ export class GUIMap {
             if (!drag)
                 return;
 
-            const newPoint = {
-                x: Math.round(element.offsetLeft / GUIMap.zoom),
-                y: Math.round(element.offsetTop / GUIMap.zoom)
-            };
+            /*const newPoint = {
+                x: Math.round((element.offsetLeft+16) / GUIMap.zoom),
+                y: Math.round((element.offsetTop+32) / GUIMap.zoom)
+            };*/
+
+            const newPoint = GUIInstance.getPointFromIconPosition(element);
             console.log(newPoint)
 
             if (!GUIMap.map[newPoint.x][newPoint.y]) {
-                element.style.left = newPoint.x * GUIMap.zoom + "px";
-                element.style.top = newPoint.y * GUIMap.zoom + "px";
+                GUIMap.setPosition(element, newPoint);
             }
             else {
-                element.style.left = initPoint.x * GUIMap.zoom + "px";
-                element.style.top = initPoint.y * GUIMap.zoom + "px";
+                GUIMap.setPosition(element, initPoint);
             }
 
             drag = false;

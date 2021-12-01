@@ -13,7 +13,12 @@ Graphical tool to visualize CMAPF executions.
     
 Then add the program ccbs.out at the root of that folder.
 
+## Compiling the GUI
 
+
+    tsc
+    
+    
 ## To run the tool
 
     runlocally.sh

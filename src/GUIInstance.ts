@@ -4,7 +4,10 @@ import { Instance } from './Instance.js';
 
 
 /**
- * this static class enables to show an instance
+ * this static class enables to show an instance. An instance is made up of:
+ * - the graph (that comes from a .png)
+ * - the initial configuration
+ * - the target configuration
  */
 export class GUIInstance {
     private static _instance: Instance; // the instance (png file, init, target, radius)
@@ -15,10 +18,7 @@ export class GUIInstance {
         GUIInstance.update();
     }
 
-    static get instance(): Instance {
-        return GUIInstance._instance;
-
-    }
+    static get instance(): Instance { return GUIInstance._instance; }
 
     static get inputRadius(): HTMLInputElement { return <HTMLInputElement>document.getElementById("inputRadius"); };
 
@@ -61,11 +61,21 @@ export class GUIInstance {
     }
 
 
+
+
+    static setInitialTargetConfigurations(initConfig, targetConfig) {
+        GUIInstance.instance.init = initConfig;
+        GUIInstance.instance.target = targetConfig;
+        GUIInstance.update();
+    }
+
+
+
+
     /**
      * @description update the GUI wrt the instance
      */
     static update() {
-
         const initAndTargets = document.getElementById("initAndTargets");
         initAndTargets.innerHTML = "";
         for (let i = 0; i < GUIInstance.instance.init.length; i++)
@@ -79,15 +89,14 @@ export class GUIInstance {
         img.classList.add("init");
         img.src = "img/init.png";
         GUIMap.setPosition(img, GUIInstance.instance.init[i]);
-        GUIMap.forAgentNumber(img, i);
+        GUIMap.setAgentColor(img, i);
         GUIMap.draggable(img, () => {
-            GUIInstance.instance.init[i] = {
-                x: img.offsetLeft / GUIMap.zoom,
-                y: img.offsetTop / GUIMap.zoom
-            };
+            GUIInstance.instance.init[i] = GUIInstance.getPointFromIconPosition(img);
         });
         return img;
     }
+
+
 
 
     static targetPointToHTMLElement(i: number) {
@@ -95,13 +104,22 @@ export class GUIInstance {
         img.classList.add("init");
         img.src = "img/target.png";
         GUIMap.setPosition(img, GUIInstance.instance.target[i]);
-        GUIMap.forAgentNumber(img, i);
+        GUIMap.setAgentColor(img, i);
         GUIMap.draggable(img, () => {
-            GUIInstance.instance.target[i] = {
-                x: img.offsetLeft / GUIMap.zoom,
-                y: img.offsetTop / GUIMap.zoom
-            };
+            GUIInstance.instance.target[i] = GUIInstance.getPointFromIconPosition(img);
         });
         return img;
+    }
+
+
+
+    /**
+     * @returns the coordinate in the map from the coordinate of the icon img
+     */
+    static getPointFromIconPosition(img: HTMLElement) {
+        return {
+            x: Math.floor((img.offsetLeft + 16) / GUIMap.zoom),
+            y: Math.floor((img.offsetTop + 32) / GUIMap.zoom)
+        };
     }
 }
