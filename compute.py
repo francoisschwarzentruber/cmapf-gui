@@ -4,6 +4,12 @@ import create_graph_from_png
 import json
 import subprocess
 
+import os
+sys.path.append(os.path.normpath(os.path.join(os.getcwd(),"../L3internship_CMAPF ")))
+sys.path.append(os.path.normpath(os.path.join(os.getcwd(),"../projet/cmapf_solver ")))
+import mapfalgo
+import tateo
+import tests 
 
 TIMEOUT = 10
 
@@ -21,6 +27,7 @@ def getSolutionCpluplusTool(init, target, radius, png):
     createExperienceFile(init, target, radius, png)
     proc = subprocess.Popen(
         ["timeout " + str(TIMEOUT) + "s ./ccbs.out --graph-folder graphs/ --exp exps/1.exp --collisionfree false "], stdout=subprocess.PIPE, shell=True)
+        #["timeout " + str(TIMEOUT) + "s ../projet/cmapf_solver/build/console_main --algo CMARRT--graph-folder graphs/ --exp exps/1.exp --collisionfree false "], stdout=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
 
     # Parse output for solution
