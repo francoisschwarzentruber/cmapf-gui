@@ -40,7 +40,6 @@ def getSolutionCpluplusTool(init, target, radius, pngFileName):
     (out, err) = proc.communicate()
 
     # Parse output for solution
-    
     try:     
         outSplit = str(out).split("\\n")
         lastLine = outSplit[len(outSplit)-2]
