@@ -33,17 +33,20 @@ def getSolutionCpluplusTool(init, target, radius, pngFileName):
     createExperienceFile(init, target, radius, pngFileName)
     proc = subprocess.Popen(
         ["timeout " + str(TIMEOUT) + "s ./ccbs.out --graph-folder graphs/ --exp exps/1.exp --collisionfree false "], stdout=subprocess.PIPE, shell=True)
-        #["timeout " + str(TIMEOUT) + "s ../projet/cmapf_solver/build/console_main --algo CMARRT--graph-folder graphs/ --exp exps/1.exp --collisionfree false "], stdout=subprocess.PIPE, shell=True)
+         #["timeout " + str(TIMEOUT) + "s ../projet/cmapf_solver/build/console_main --algo CMARRT--graph-folder graphs/ --exp exps/1.exp --collisionfree false "], stdout=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
 
     # Parse output for solution
-    # TODO: Handling of errors
-    outSplit = str(out).split("\\n")
-    solution = outSplit[len(outSplit)-2].split("    ")[1]
-    solution = solution.replace('{', '[')
-    solution = solution.replace('}', ']')
-    solution = '[' + solution + ']'
-    return solution
+    
+    try:     
+        outSplit = str(out).split("\\n")
+        solution = outSplit[len(outSplit)-2].split("    ")[1]
+        solution = solution.replace('{', '[')
+        solution = solution.replace('}', ']')
+        solution = '[' + solution + ']'
+        return solution
+    except:
+        return out
 
 
 def createExperienceFile(init, target, radius, pngFileName):  # Create experience file
