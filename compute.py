@@ -5,11 +5,9 @@ import json
 import subprocess
 
 import os
-sys.path.append(os.path.normpath(os.path.join(os.getcwd(),"../L3internship_CMAPF ")))
-sys.path.append(os.path.normpath(os.path.join(os.getcwd(),"../projet/cmapf_solver ")))
-import mapfalgo
-import tateo
-import tests 
+# sys.path.append(os.path.normpath(os.path.join(os.getcwd(),"../L3internship_CMAPF ")))
+# sys.path.append(os.path.normpath(os.path.join(os.getcwd(),"../projet/cmapf_solver ")))
+
 
 TIMEOUT = 10
 
