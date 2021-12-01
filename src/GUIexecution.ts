@@ -173,7 +173,9 @@ export class GUIExecution {
         }).then((response) => {
             if (response.ok) {
                 response.text().then((str) => {
+                    console.log("OUTPUT OF THE TOOL:")
                     console.log(str);
+                    console.log("END OUTPUT OF THE TOOL")
                     let lines = str.split("\n");
                     lines = lines.filter((line) => line != "");
                     const lastline = lines[lines.length - 1];
