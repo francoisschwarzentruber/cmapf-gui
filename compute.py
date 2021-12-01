@@ -28,7 +28,10 @@ def getSolutionFromDivideAndConquerAlgorithm(init, target, physFileName, commFil
     pass
 
 
-
+#
+# returns the solution, e.g. [ [1, 5, 4, 3], [4, 3, 2, 9]] which is a solution for two agents. The path of the first agent is [1, 5, 4, 3]. The path 
+# of the second agent is [4, 3, 2, 9]
+#
 def getSolutionCpluplusTool(init, target, radius, pngFileName):
     createExperienceFile(init, target, radius, pngFileName)
     proc = subprocess.Popen(
@@ -40,7 +43,8 @@ def getSolutionCpluplusTool(init, target, radius, pngFileName):
     
     try:     
         outSplit = str(out).split("\\n")
-        solution = outSplit[len(outSplit)-2].split("    ")[1]
+        lastLine = outSplit[len(outSplit)-2]
+        solution = lastLine.split("    ")[1]
         solution = solution.replace('{', '[')
         solution = solution.replace('}', ']')
         solution = '[' + solution + ']'
