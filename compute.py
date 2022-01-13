@@ -53,7 +53,7 @@ def getSolutionCpluplusTool(init, target, radius, pngFileName):
         return out
     
 
-
+#create the experience fil in exps/1.exp
 def createExperienceFile(init, target, radius, pngFileName):  # Create experience file
     # TODO: handle multiple file
     with open('exps/1.exp', 'w') as filehandle:
