@@ -30,7 +30,11 @@ Everything is explained in
      compute.php
      
      
-     
+## Running the solver
+
+The solver should be run as follows (without the GUI):
+
+ccbs.out --graph-folder graphs/ --exp exps/1.exp --collisionfree false
      
 ## Output format
 

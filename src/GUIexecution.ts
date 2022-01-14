@@ -173,9 +173,17 @@ export class GUIExecution {
             body: fd
         }).then((response) => {
             if (response.ok) {
-                response.text().then((str) => {
-                    console.log(str);
-                    (<HTMLTextAreaElement>document.getElementById("textarea")).value = str;
+                response.text().then((strRaw) => {
+                    let str = strRaw;
+                    if (strRaw.startsWith("b'") && strRaw.endsWith("'\n"))
+                        str = strRaw.substring(2, strRaw.length - 2);
+                    const lines = str.split("\\n");
+                    const strFinal = lines.join("\n");
+                    const textArea = (<HTMLTextAreaElement>document.getElementById("textarea"));
+                    textArea.value = strFinal;
+                    textArea.selectionStart = strFinal.length-1;
+                    textArea.onkeyup(undefined);
+
                     /*let lines = str.split("\n");
                     lines = lines.filter((line) => line != "");
                     const lastline = lines[lines.length - 1];
