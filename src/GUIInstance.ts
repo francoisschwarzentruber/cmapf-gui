@@ -31,8 +31,8 @@ export class GUIInstance {
         const instance = new Instance();
         instance.pngFileName = pngFileName;
         await GUIMap.load(pngFileName);
-        instance.init = [GUIMap.getRandomPoint(), GUIMap.getRandomPoint()];
-        instance.target = [GUIMap.getRandomPoint(), GUIMap.getRandomPoint()];
+        instance.init = [GUIMap.getRandomPoint()];//, GUIMap.getRandomPoint()];
+        instance.target = [GUIMap.getRandomPoint()];//[GUIMap.getRandomPoint(), GUIMap.getRandomPoint()];
         instance.radius = parseInt(GUIInstance.inputRadius.value);
         GUIInstance.instance = instance;
         GUIExecution.reset();
