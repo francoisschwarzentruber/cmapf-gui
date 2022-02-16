@@ -2,6 +2,7 @@ import { GUIMap } from './src/GUIMap.js';
 import { GUIPngFileNames } from './src/GUIPngFileNames.js';
 import { GUIExecution } from './src/GUIexecution.js';
 import { GUIInstance } from "./src/GUIInstance.js";
+import { RRTVisualizer } from './src/RRTVisualizer.js';
 
 
 
@@ -14,9 +15,14 @@ window.onload = () => {
     const textArea = <HTMLTextAreaElement>document.getElementById("textarea");
 
     const updateCurrentExecutionTextArea = () => {
+        const lines = textArea.value.split("\n"); 
         const nbLine = textArea.value.substr(0, textArea.selectionStart).split("\n").length - 1;
-        const line = textArea.value.split("\n")[nbLine].trim();
+        const line = lines[nbLine].trim();
 
+        RRTVisualizer.init();
+        for(const line of lines) {
+            RRTVisualizer.parseAndAdd(line);
+        }
         if (line != "")
             GUIExecution.loadFromString(line);
     };

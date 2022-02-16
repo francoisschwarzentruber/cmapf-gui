@@ -61,7 +61,8 @@ img {
 #config,
 #initAndTargets,
 #paths,
-#communication {
+#communication,
+#RRT {
     position: absolute;
     left: 0px;
     top: 0px;
@@ -73,6 +74,13 @@ img {
     fill: none;
     stroke-dasharray: 2;
 }
+
+
+#RRT polyline {
+    stroke: black;
+    fill: none;
+}
+
 
 
 #nosolution {

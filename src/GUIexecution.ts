@@ -1,6 +1,8 @@
 import { GUIInstance } from './GUIInstance.js';
 import { GUIMap } from './GUIMap.js';
 import { Point } from './Point.js';
+import { RRTVisualizer } from './RRTVisualizer.js';
+import { SVG } from './SVG.js';
 
 
 
@@ -43,7 +45,7 @@ function textToExecution(str: string): Execution {
 
 
 
-function textToConfig(str: string): Point[] {
+export function textToConfig(str: string): Point[] {
     const Astr = str.replace("<", "[").replace(">", "]");
     return eval(Astr).map(GUIMap.numberToPoint);
 }
@@ -83,7 +85,7 @@ export class GUIExecution {
             for (let agentb = agent + 1; agentb < c.length; agentb++) {
                 if ((c[agent].x - c[agentb].x) ** 2 + (c[agent].y - c[agentb].y) ** 2 <= r ** 2)
                     document.getElementById("communication").appendChild(
-                        GUIExecution.getSVGPolyLine([c[agent], c[agentb]]));
+                        SVG.getSVGPolyLine([c[agent], c[agentb]]));
             }
 
     }
@@ -124,7 +126,7 @@ export class GUIExecution {
             document.getElementById("paths").innerHTML = "";
 
             for (const agent of exec.agents) {
-                document.getElementById("paths").appendChild(GUIExecution.getSVGPolyLine(exec.path(agent)));
+                document.getElementById("paths").appendChild(SVG.getSVGPolyLine(exec.path(agent)));
             }
 
             GUIInstance.setInitialTargetConfigurations(exec.config(0), exec.config(exec.length - 1));
@@ -138,13 +140,6 @@ export class GUIExecution {
     }
 
 
-    static getSVGPolyLine(points: Point[]): SVGPolylineElement {
-        const svgns = "http://www.w3.org/2000/svg";
-        const shape = document.createElementNS(svgns, "polyline");
-        shape.setAttributeNS(null, 'points', points.map(GUIMap.getCenterCell).map((p) => p.x + "," + p.y).join(" "));
-        return shape;
-    }
-
 
 
     static reset() {
@@ -154,6 +149,7 @@ export class GUIExecution {
         GUIExecution.slider.classList.add("disabled");
         document.getElementById("paths").innerHTML = "";
         document.getElementById("communication").innerHTML = "";
+        RRTVisualizer.init();
     }
 
     /**

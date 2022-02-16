@@ -73,10 +73,14 @@ export class GUIMap {
                 GUIMap.imgMap = img;
                 GUIMap.map = GUIMap._imgToBitMap(img);
 
-                document.getElementById("paths").style.width = GUIMap.width * GUIMap.zoom + "px";
-                document.getElementById("paths").style.height = GUIMap.height * GUIMap.zoom + "px";
-                document.getElementById("communication").style.width = GUIMap.width * GUIMap.zoom + "px";
-                document.getElementById("communication").style.height = GUIMap.height * GUIMap.zoom + "px";
+                function redim(el) {
+                    el.style.width = GUIMap.width * GUIMap.zoom + "px";
+                    el.style.height = GUIMap.height * GUIMap.zoom + "px";
+                }
+                redim(document.getElementById("paths"));
+                redim(document.getElementById("communication"));
+                redim(document.getElementById("RRT"));
+
                 GUIMap.drawMap();
                 resolve();
             }
