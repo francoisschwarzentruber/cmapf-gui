@@ -67,7 +67,7 @@ export class GUIInstance {
                 const y = Math.floor(c[i].y + r * Math.sin(angle));
                 
                 if (0 <= x && x < GUIMap.map.length)
-                    if (y < GUIMap.map[x].length)
+                    if (0 <= y && y < GUIMap.map[x].length)
                         if (!GUIMap.map[x][y]) {
                             c.push({ x: x, y: y });
                             return;
