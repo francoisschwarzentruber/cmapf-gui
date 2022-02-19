@@ -65,7 +65,7 @@ export class GUIInstance {
                 const r = GUIInstance._instance.radius * Math.random();
                 const x = Math.floor(c[i].x + r * Math.cos(angle));
                 const y = Math.floor(c[i].y + r * Math.sin(angle));
-                
+
                 if (0 <= x && x < GUIMap.map.length)
                     if (0 <= y && y < GUIMap.map[x].length)
                         if (!GUIMap.map[x][y]) {
@@ -82,9 +82,18 @@ export class GUIInstance {
     }
 
 
+    static setInitialConfiguration(initConfig: Point[]): void {
+        GUIInstance.instance.init = initConfig;
+        GUIInstance.update();
+    }
+
+    static setTargetConfiguration(targetConfig: Point[]): void {
+        GUIInstance.instance.target = targetConfig;
+        GUIInstance.update();
+    }
 
 
-    static setInitialTargetConfigurations(initConfig, targetConfig) {
+    static setInitialTargetConfigurations(initConfig: Point[], targetConfig: Point[]): void {
         GUIInstance.instance.init = initConfig;
         GUIInstance.instance.target = targetConfig;
         GUIInstance.update();

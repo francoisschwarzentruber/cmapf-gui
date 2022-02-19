@@ -1,6 +1,6 @@
 import { GUIMap } from './src/GUIMap.js';
 import { GUIPngFileNames } from './src/GUIPngFileNames.js';
-import { GUIExecution } from './src/GUIexecution.js';
+import { GUIExecution, textToConfig } from './src/GUIexecution.js';
 import { GUIInstance } from "./src/GUIInstance.js";
 import { RRTVisualizer } from './src/RRTVisualizer.js';
 
@@ -14,14 +14,23 @@ window.onload = () => {
 
     const textArea = <HTMLTextAreaElement>document.getElementById("textarea");
 
-    const updateCurrentExecutionTextArea = () => {
-        const lines = textArea.value.split("\n"); 
+    const updateCurrentExecutionTextArea = async () => {
+        const lines = textArea.value.split("\n");
         const nbLine = textArea.value.substr(0, textArea.selectionStart).split("\n").length - 1;
         const line = lines[nbLine].trim();
 
         RRTVisualizer.init();
-        for(const line of lines) {
-            RRTVisualizer.parseAndAdd(line);
+        for (const line of lines) {
+            if (line.startsWith("image file:"))
+                await GUIInstance.load(line.substring(11).trim());
+            if (line.startsWith("radius:"))
+                (<HTMLInputElement>document.getElementById("inputRadius")).value = line.substring(7).trim();
+            else if (line.startsWith("init:"))
+                GUIInstance.setInitialConfiguration(textToConfig(line.substring(5)));
+            else if (line.startsWith("target:"))
+                GUIInstance.setTargetConfiguration(textToConfig(line.substring(7)));
+            else
+                RRTVisualizer.parseAndAdd(line);
         }
         if (line != "")
             GUIExecution.loadFromString(line);
