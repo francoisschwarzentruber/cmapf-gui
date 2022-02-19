@@ -1,6 +1,7 @@
 import { GUIExecution } from './GUIexecution.js';
 import { GUIMap } from './GUIMap.js';
 import { Instance } from './Instance.js';
+import { Point } from './Point.js';
 
 
 /**
@@ -55,8 +56,28 @@ export class GUIInstance {
      */
     static addAgent() {
         GUIExecution.reset();
-        GUIInstance.instance.init.push(GUIMap.getRandomPoint());
-        GUIInstance.instance.target.push(GUIMap.getRandomPoint());
+
+        function extendConfig(c: Point[]): void {
+            const i = Math.floor(c.length * Math.random());
+            let j = 10000;
+            while (j > 0) {
+                const angle = Math.random() * 2 * Math.PI;
+                const r = GUIInstance._instance.radius * Math.random();
+                const x = Math.floor(c[i].x + r * Math.cos(angle));
+                const y = Math.floor(c[i].y + r * Math.sin(angle));
+                
+                if (0 <= x && x < GUIMap.map.length)
+                    if (y < GUIMap.map[x].length)
+                        if (!GUIMap.map[x][y]) {
+                            c.push({ x: x, y: y });
+                            return;
+                        }
+                j--;
+            }
+            throw "aïe"
+        }
+        extendConfig(GUIInstance.instance.init);
+        extendConfig(GUIInstance.instance.target);
         GUIInstance.update();
     }
 
