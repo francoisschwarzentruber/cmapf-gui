@@ -3,12 +3,14 @@ Created on Jul 31, 2017
 
 @author: banfi
 '''
+import argparse
 import math
 import cv2
 import numpy as np
 from igraph import *
 import matplotlib.pyplot as plt
 import sys
+import random
 
 import gflags
 
@@ -128,6 +130,8 @@ def create_phys_graph_grid():
 
     return G_E,im_array
 
+
+
 def create_comm_graph_range(G_E, im_array=None):
     # print('Creating range communication graph...')
     G_C = Graph(directed=False)
@@ -162,6 +166,106 @@ def create_comm_graph_range(G_E, im_array=None):
 
         # plt.show()
     return G_C
+
+def create_phys_graph_grid_3d(height, obstacle_density):
+    """
+        Create graph from png, and duplicate it for z=1..height.
+        Each empty cell becomes an obstacle with probability obstacle_density%
+    """
+    # print('Creating grid physical graph...')
+    im = cv2.imread(gflags.FLAGS.file_path)
+    im_array = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+    
+    rows = np.size(im_array,0)
+    cols = np.size(im_array,1)
+
+    G_E = Graph(directed=False)
+    curr_id = 0
+    bu = gflags.FLAGS.cell_size/2
+    for z in range(0,height * gflags.FLAGS.cell_size, gflags.FLAGS.cell_size):
+        for i in range(0, rows, gflags.FLAGS.cell_size):
+            for j in range(0, cols, gflags.FLAGS.cell_size):
+                if is_grid_cell(im_array, i,j, rows, cols):
+                    if random.randint(0,100) >= obstacle_density:
+                        G_E.add_vertex()
+                        G_E.vs[curr_id]['y_coord'] = i + bu
+                        G_E.vs[curr_id]['x_coord'] = j + bu
+                        G_E.vs[curr_id]['z_coord'] = z + bu
+                        curr_id += 1
+
+    neighbors = []
+    for vertex_id in range(curr_id):
+
+        curr_x = G_E.vs[vertex_id]['x_coord']
+        curr_y = G_E.vs[vertex_id]['y_coord']
+        curr_z = G_E.vs[vertex_id]['z_coord']
+
+        up = G_E.vs.select(x_coord_eq=curr_x, y_coord_eq=(curr_y + gflags.FLAGS.cell_size), z_coord_eq=curr_z)
+        if len(up):
+            neighbors.append((vertex_id, up[0].index))
+
+        right = G_E.vs.select(x_coord_eq=(curr_x + gflags.FLAGS.cell_size), y_coord_eq=curr_y, z_coord_eq=curr_z)
+        if len(right):
+            neighbors.append((vertex_id, right[0].index))
+
+        outward = G_E.vs.select(x_coord_eq=curr_x, y_coord_eq=curr_y, z_coord_eq=(curr_z + gflags.FLAGS.cell_size))
+        if len(outward):
+            neighbors.append((vertex_id, outward[0].index))
+
+
+    G_E.add_edges(neighbors)
+    # print('Done. Number of vertices: ', len(G_E.vs))
+
+    if gflags.FLAGS.debug:
+        plt.imshow(im_array)
+        for edge in G_E.es:
+            v1 = G_E.vs[edge.source]
+            v2 = G_E.vs[edge.target]
+            plt.plot([v1['x_coord'] ,v2['x_coord']],[v1['y_coord'], v2['y_coord']],[v1['z_coord'], v2['z_coord']],'b')
+
+        plt.show()
+
+    return G_E,im_array
+
+def create_comm_graph_range_3d(G_E, im_array=None):
+    # print('Creating range communication graph...')
+    G_C = Graph(directed=False)
+    for vertex_id in range(len(G_E.vs)):
+        G_C.add_vertex()
+        G_C.vs[vertex_id]['x_coord'] = G_E.vs[vertex_id]['x_coord']
+        G_C.vs[vertex_id]['y_coord'] = G_E.vs[vertex_id]['y_coord']
+        G_C.vs[vertex_id]['z_coord'] = G_E.vs[vertex_id]['z_coord']
+
+    neighbors = []
+    range_squared = gflags.FLAGS.range**2
+
+    for vertex_id_1 in range(len(G_C.vs)):
+        for vertex_id_2 in range(vertex_id_1 + 1, len(G_C.vs)):
+            if (G_C.vs[vertex_id_1]['x_coord']- G_C.vs[vertex_id_2]['x_coord'])**2 + \
+               (G_C.vs[vertex_id_1]['y_coord']- G_C.vs[vertex_id_2]['y_coord'])**2 +\
+               (G_C.vs[vertex_id_1]['z_coord']- G_C.vs[vertex_id_2]['z_coord'])**2 \
+               <= range_squared:
+               neighbors.append((vertex_id_1, vertex_id_2))
+
+    G_C.add_edges(neighbors)
+
+    # print('Done.')
+
+    if gflags.FLAGS.debug:
+        plt.imshow(im_array)
+        for edge in G_C.es.select(_source=0):
+            v1 = G_C.vs[edge.source]
+            v2 = G_C.vs[edge.target]
+            plt.plot([v1['x_coord'], v2['x_coord']],[v1['y_coord'], v2['y_coord']],'b')
+        for edge in G_C.es.select(_target=0):
+            v1 = G_C.vs[edge.source]
+            v2 = G_C.vs[edge.target]
+            plt.plot([v1['x_coord'], v2['x_coord']],[v1['y_coord'], v2['y_coord']],'b')
+
+        # plt.show()
+    return G_C
+
+
 
 
 def create_comm_graph_los(G_E, im_array=None):
@@ -206,9 +310,12 @@ def create_comm_graph_los(G_E, im_array=None):
 
 
 def cgfpng(radius, png):
-    # radius 
-    # png = filename
-    # return the filenames of first the movement graph, then the communication graph
+    """
+        radius 
+        png = filename
+        dim = dimension 2 or 3
+        return the filenames of first the movement graph, then the communication graph
+    """
     RADIUS = radius
     MAP = png
 
@@ -259,3 +366,56 @@ def cgfpng(radius, png):
     return physFileName, commFileName
 
 
+def cgfpng_3d(radius, height, density, png):
+    """
+        radius 
+        png = filename
+        dim = dimension 2 or 3
+        return the filenames of first the movement graph, then the communication graph
+    """
+    RADIUS = radius
+    MAP = png
+
+    # RADIUS = 150
+    TYPE = 'range' # los ?
+    # MAP = "smallmaze2.png"
+
+    gflags.DEFINE_string('file_path', 'graphs/' + MAP, 'png file path')
+
+    gflags.DEFINE_string('phys_discr_type', 'uniform_grid', 'environment discretization - physical')
+    gflags.DEFINE_integer('cell_size', 1, 'pixels making 1 grid cell (only for uniform grid discretization)')
+
+    gflags.DEFINE_string('comm_discr_type', TYPE, 'environment discretization - comm')
+    gflags.DEFINE_integer('range', RADIUS, 'communication range (in pixels)')
+
+    gflags.DEFINE_string('output_phys', 'graphs/' + MAP + '_phys', 'physical graph output')
+    gflags.DEFINE_string('output_comm', 'graphs/' + MAP + '_comm', 'communication graph output')
+
+    gflags.DEFINE_bool('debug', False, 'debug mode active')
+
+
+    #argv = gflags.FLAGS(sys.argv)
+    if gflags.FLAGS.phys_discr_type == 'uniform_grid':
+        G_E, im_array = create_phys_graph_grid_3d(height, density)
+    else:
+        print('Error! Physical discretization not supported!')
+        exit(1)
+
+    physFileName = gflags.FLAGS.output_phys + '_' + gflags.FLAGS.phys_discr_type + '_' + \
+              str(gflags.FLAGS.cell_size) + '_' + gflags.FLAGS.comm_discr_type + '_' + \
+              str(gflags.FLAGS.range) + '.graphml'
+
+    G_E.write(physFileName, format='graphml')
+
+    if gflags.FLAGS.comm_discr_type == 'range':
+        G_C = create_comm_graph_range_3d(G_E, im_array)
+    else:
+        print('Error! Comm discretization not supported!')
+        exit(1)
+
+    commFileName = gflags.FLAGS.output_comm + '_' + gflags.FLAGS.phys_discr_type + '_' + \
+              str(gflags.FLAGS.cell_size) + '_' + gflags.FLAGS.comm_discr_type + '_' + \
+              str(gflags.FLAGS.range) + '.graphml'
+    G_C.write(commFileName, format='graphml')
+
+    return physFileName, commFileName
